@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<title>UniVerse 🦄</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet"/>
+<style>
+/* ══ TEMAS ══ */
+:root{
+  --bg:#fdf0ff;--bg2:#f9e6ff;
+  --a:#ff6eb4;--a2:#ffaed6;--a3:#ffe0f2;
+  --b:#c264f0;--b2:#e0a8ff;--b3:#f3d8ff;
+  --text:#3d1a52;--dim:#a07ab8;--shadow:rgba(194,100,240,0.18);
+  --hdr-bg:rgba(255,255,255,.95);
+  --card-bg:#fff;--input-bg:#fff;
+  --msg-ai-bg:linear-gradient(135deg,rgba(255,110,180,.08),rgba(194,100,240,.08));
+  --msg-ai-border:var(--a3);
+}
+/* Rosa/Lilás */
+body.t-rose{--bg:#fdf0ff;--a:#ff6eb4;--a2:#ffaed6;--a3:#ffe0f2;--b:#c264f0;--b2:#e0a8ff;--b3:#f3d8ff;--text:#3d1a52;--dim:#a07ab8;--shadow:rgba(194,100,240,0.18);}
+/* Azul bebê */
+body.t-baby{--bg:#f0f6ff;--a:#5b9df5;--a2:#a8c8ff;--a3:#dceeff;--b:#7b6ef0;--b2:#b8b0ff;--b3:#e8e6ff;--text:#1a2852;--dim:#6080b8;--shadow:rgba(91,157,245,0.18);}
+/* Verde menta */
+body.t-mint{--bg:#f0fff8;--a:#3ecfa0;--a2:#90e8cc;--a3:#d0f7ec;--b:#2db08a;--b2:#88d4bc;--b3:#ccf0e4;--text:#0d3328;--dim:#5a9e88;--shadow:rgba(62,207,160,0.18);}
+/* Preto/Roxo escuro */
+body.t-dark{--bg:#0e0814;--a:#c264f0;--a2:#8a3fc0;--a3:#2a1040;--b:#ff6eb4;--b2:#c040a0;--b3:#3a1030;--text:#f0d8ff;--dim:#9070b0;--shadow:rgba(194,100,240,0.35);--hdr-bg:rgba(14,8,20,.96);--card-bg:#1a0828;--input-bg:#1a0828;--msg-ai-bg:linear-gradient(135deg,rgba(194,100,240,.14),rgba(255,110,180,.10));--msg-ai-border:var(--a3);}
+/* Laranja/Pêssego */
+body.t-peach{--bg:#fff8f0;--a:#ff8c5a;--a2:#ffb896;--a3:#ffe4d4;--b:#e06030;--b2:#f0a080;--b3:#ffd8c0;--text:#3d1a00;--dim:#a07058;--shadow:rgba(255,140,90,0.18);}
+/* Vermelho/Rosa quente */
+body.t-red{--bg:#fff0f2;--a:#f03060;--a2:#f880a0;--a3:#ffd0dc;--b:#c01040;--b2:#e06080;--b3:#ffc0cc;--text:#3d0010;--dim:#a05868;--shadow:rgba(240,48,96,0.18);}
+/* Dourado/Bege */
+body.t-gold{--bg:#fffbf0;--a:#d4a020;--a2:#e8c870;--a3:#f8ecc0;--b:#b08000;--b2:#d4b060;--b3:#f0e0a0;--text:#2a1e00;--dim:#907040;--shadow:rgba(212,160,32,0.18);}
+/* Azul marinho */
+body.t-navy{--bg:#f0f2ff;--a:#3050d0;--a2:#7090e8;--a3:#c8d4f8;--b:#1030b0;--b2:#5070d0;--b3:#b0c0f0;--text:#08103a;--dim:#5060a0;--shadow:rgba(48,80,208,0.18);}
+/* Verde esmeralda */
+body.t-emerald{--bg:#f0fdf6;--a:#20a860;--a2:#68d098;--a3:#c0f0d8;--b:#008040;--b2:#50c080;--b3:#a8e8c8;--text:#002810;--dim:#408060;--shadow:rgba(32,168,96,0.18);}
+/* Cinza/Prata */
+body.t-silver{--bg:#f6f6f8;--a:#7080a0;--a2:#a0b0c8;--a3:#d8e0ec;--b:#506080;--b2:#8090b0;--b3:#c8d0e0;--text:#18202e;--dim:#607080;--shadow:rgba(112,128,160,0.18);}
+
+
+/* ══ AVATAR PICKER ══ */
+.av-pick-ov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.av-pick-ov.on{opacity:1;pointer-events:all;}
+.av-pick-sheet{background:var(--bg);border:2px solid var(--a3);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:0 0 calc(20px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.av-pick-ov.on .av-pick-sheet{transform:translateY(0);}
+.av-pick-hdr{padding:14px 18px 12px;border-bottom:2px solid var(--a3);display:flex;align-items:center;justify-content:space-between;background:var(--hdr-bg);border-radius:28px 28px 0 0;}
+.av-pick-title{font-family:'Pacifico',cursive;font-size:.95rem;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.av-pick-handle{width:34px;height:4px;border-radius:2px;background:var(--a3);margin:0 auto 0;}
+.av-pick-close{background:none;border:2px solid var(--a3);border-radius:9px;width:30px;height:30px;cursor:pointer;font-size:.88rem;color:var(--dim);display:flex;align-items:center;justify-content:center;}
+.av-pick-close:active{background:var(--a3);}
+.av-pick-tabs{display:flex;gap:6px;padding:12px 16px 0;}
+.av-tab{flex:1;padding:8px;border-radius:12px;border:2px solid var(--a3);background:transparent;color:var(--dim);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:800;cursor:pointer;transition:all .2s;}
+.av-tab.on{border-color:var(--b);background:var(--b3);color:var(--b);}
+.av-emoji-panel{padding:12px 16px;}
+.av-emoji-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;}
+.av-emoji-btn{width:100%;aspect-ratio:1;border-radius:12px;border:2px solid var(--a3);background:transparent;font-size:1.3rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.av-emoji-btn.on{border-color:var(--b);background:var(--b3);transform:scale(1.12);}
+.av-emoji-btn:active{transform:scale(.94);}
+.av-photo-panel{padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.av-photo-preview{width:80px;height:80px;border-radius:50%;margin:0 auto;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;box-shadow:0 4px 14px var(--shadow);cursor:pointer;border:3px solid var(--b2);}
+.av-photo-preview img{width:100%;height:100%;object-fit:cover;}
+.av-photo-btn{width:100%;padding:11px;border-radius:14px;border:2px dashed var(--a2);background:transparent;color:var(--a);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;text-align:center;transition:all .2s;}
+.av-photo-btn:active{background:var(--a3);}
+.av-actions{display:flex;gap:8px;padding:12px 16px 0;}
+.av-cancel{flex:1;padding:10px;border-radius:13px;border:2px solid var(--a3);background:transparent;color:var(--dim);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;}
+.av-apply{flex:2;padding:10px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;box-shadow:0 4px 14px var(--shadow);}
+.av-apply:active{transform:scale(.97);}
+
+/* Clickable avatars in chat */
+.mav.clickable{cursor:pointer;transition:transform .2s;}
+.mav.clickable:active{transform:scale(.85);}
+.phc-av.clickable{cursor:pointer;transition:transform .2s;}
+.phc-av.clickable:active{transform:scale(.88);}
+
+/* Avatar display with photo */
+.av-img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;color:var(--text);background:var(--bg);transition:background .4s,color .4s;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at 15% 10%,rgba(var(--_a,255,110,180),.12) 0%,transparent 40%),
+    radial-gradient(circle at 85% 90%,rgba(var(--_b,194,100,240),.12) 0%,transparent 40%);
+  transition:all .4s;}
+.shape{position:fixed;pointer-events:none;z-index:0;border-radius:50%;animation:floatS var(--d,6s) ease-in-out infinite;}
+@keyframes floatS{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-18px) scale(1.07)}}
+.sh1{width:100px;height:100px;top:-20px;right:-10px;background:radial-gradient(circle,rgba(255,174,214,.25),transparent 70%);--d:7s;}
+.sh2{width:70px;height:70px;bottom:60px;left:-15px;background:radial-gradient(circle,rgba(194,100,240,.2),transparent 70%);--d:9s;animation-delay:-3s;}
+.star{position:fixed;pointer-events:none;z-index:0;animation:twinkle var(--d,3s) ease-in-out infinite;color:var(--a2);}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.8;transform:scale(1.3)}}
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;gap:7px;padding:12px 13px 11px;
+  background:var(--hdr-bg);backdrop-filter:blur(20px);flex-shrink:0;
+  border-bottom:2px solid var(--a3);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .4s;}
+.hdr-logo{font-size:1.7rem;animation:bob 3s ease-in-out infinite;flex-shrink:0;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-5px) rotate(5deg)}}
+.hdr-title{font-family:'Pacifico',cursive;font-size:1.1rem;
+  background:linear-gradient(135deg,var(--a),var(--b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-sub{font-size:.52rem;color:var(--dim);letter-spacing:1.5px;margin-top:1px;font-weight:700;}
+.hdr-btns{margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:nowrap;}
+.hdr-btn{background:none;border:2px solid var(--a3);border-radius:11px;
+  padding:5px 9px;cursor:pointer;display:flex;align-items:center;gap:4px;
+  font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:800;
+  color:var(--b);transition:all .2s;white-space:nowrap;}
+.hdr-btn:active{background:var(--b3);}
+.hdr-btn .badge-num{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border-radius:7px;padding:1px 5px;font-size:.62rem;font-weight:900;}
+.hdr-btn.persona-btn{border-color:var(--b2);position:relative;}
+.hdr-btn.persona-btn.has-persona{border-color:var(--b);background:linear-gradient(135deg,rgba(194,100,240,.08),rgba(255,110,180,.06));}
+.persona-dot{width:6px;height:6px;border-radius:50%;background:var(--a);position:absolute;top:-2px;right:-2px;display:none;}
+.persona-btn.has-persona .persona-dot{display:block;}
+
+/* PAGES */
+.pg{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0;}
+.pg.on{display:flex;}
+#pg-home{overflow-y:auto;padding:14px 13px 120px;}
+#pg-home::-webkit-scrollbar{width:3px;}
+#pg-home::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px;}
+
+/* HOME */
+.welcome-card{border-radius:24px;padding:18px 16px;margin-bottom:12px;text-align:center;
+  background:linear-gradient(135deg,rgba(var(--_a,255,110,180),.1),rgba(var(--_b,194,100,240),.08));
+  border:2px solid var(--a3);position:relative;overflow:hidden;}
+.welcome-card::before{content:'✿';position:absolute;top:8px;right:14px;font-size:1.6rem;opacity:.13;animation:spin 10s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wc-em{font-size:2.5rem;display:block;margin-bottom:5px;animation:bob 4s ease-in-out infinite;}
+.wc-title{font-family:'Pacifico',cursive;font-size:.95rem;
+  background:linear-gradient(135deg,var(--a),var(--b));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+.wc-text{font-size:.72rem;color:var(--dim);line-height:1.7;}
+
+.persona-home-card{border-radius:16px;padding:10px 12px;margin-bottom:12px;
+  background:linear-gradient(135deg,rgba(194,100,240,.07),rgba(255,110,180,.05));
+  border:2px dashed var(--b2);cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:10px;}
+.persona-home-card:active{border-style:solid;background:var(--b3);}
+.phc-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px var(--shadow);}
+.phc-info{flex:1;}
+.phc-name{font-size:.82rem;font-weight:800;color:var(--text);}
+.phc-sub{font-size:.63rem;color:var(--dim);margin-top:1px;}
+.phc-arrow{color:var(--b2);font-size:1rem;}
+
+.sec-title{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.sec-em{font-size:1rem;}
+.sec-label{font-size:.67rem;text-transform:uppercase;letter-spacing:2px;color:var(--dim);font-weight:800;}
+.sec-line{flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--a3),transparent);}
+
+.genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:30px;}
+.gc{border-radius:16px;padding:13px 11px;cursor:pointer;border:2px solid transparent;transition:all .25s;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;}
+.gc::after{content:attr(data-sparkle);position:absolute;top:6px;right:8px;font-size:.9rem;opacity:.4;animation:floatS 4s ease-in-out infinite;}
+.gc:active{transform:scale(.96);}
+.gc .gc-em{font-size:1.7rem;}
+.gc .gc-name{font-size:.85rem;font-weight:800;}
+.gc .gc-desc{font-size:.63rem;line-height:1.4;font-weight:600;}
+.gc.romance{background:linear-gradient(135deg,#fff0f6,#ffe4f0);border-color:#ffb8d9;color:#c2185b;}
+.gc.romance .gc-desc{color:#e06090;}
+.gc.bl{background:linear-gradient(135deg,#f0f4ff,#e4ecff);border-color:#b8c8ff;color:#3949ab;}
+.gc.bl .gc-desc{color:#6070d0;}
+.gc.gl{background:linear-gradient(135deg,#f5f0ff,#ede4ff);border-color:#c8b8ff;color:#7b1fa2;}
+.gc.gl .gc-desc{color:#9060c0;}
+.gc.hot{background:linear-gradient(135deg,#fff4f0,#ffe8e0);border-color:#ffb8a0;color:#e64a19;}
+.gc.hot .gc-desc{color:#e07050;}
+.gc.dark{background:linear-gradient(135deg,#f0f0f5,#e8e4f0);border-color:#c0b8d0;color:#37274f;}
+.gc.dark .gc-desc{color:#7060a0;}
+.gc.fantasy{background:linear-gradient(135deg,#f0fff4,#e4ffec);border-color:#a8e6c0;color:#1b5e20;}
+.gc.fantasy .gc-desc{color:#5090a0;}
+.gc.drama{background:linear-gradient(135deg,#fffbf0,#fff3e0);border-color:#ffd080;color:#e65100;}
+.gc.drama .gc-desc{color:#d08040;}
+.gc.suspense{background:linear-gradient(135deg,#f5f0f0,#ede8e8);border-color:#c8b0b0;color:#4a1515;}
+.gc.suspense .gc-desc{color:#906060;}
+
+/* FANFIC PAGE */
+#pg-fanfic{overflow:hidden;}
+.fanfic-topbar{padding:9px 12px;flex-shrink:0;
+  background:var(--hdr-bg);backdrop-filter:blur(16px);border-bottom:2px solid var(--a3);
+  display:flex;align-items:center;gap:6px;transition:all .4s;}
+.ftb-back{background:none;border:2px solid var(--a3);border-radius:10px;width:32px;height:32px;cursor:pointer;font-size:1.05rem;color:var(--a);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.ftb-back:active{background:var(--a3);}
+.ftb-badge{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:16px;border:2px solid;font-size:.72rem;font-weight:800;}
+
+/* SCENARIO BAR */
+.scenario-bar{padding:8px 12px;background:var(--hdr-bg);border-bottom:1.5px solid var(--a3);flex-shrink:0;overflow-x:auto;display:flex;gap:6px;align-items:center;scrollbar-width:none;transition:all .4s;}
+.scenario-bar::-webkit-scrollbar{display:none;}
+.scenario-bar-label{font-size:.6rem;color:var(--dim);font-weight:800;text-transform:uppercase;letter-spacing:1px;flex-shrink:0;white-space:nowrap;}
+.sc-chip{flex-shrink:0;padding:5px 11px;border-radius:14px;border:1.5px solid var(--a3);background:transparent;color:var(--dim);font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:4px;}
+.sc-chip.on{border-color:var(--b);background:var(--b3);color:var(--b);}
+.sc-chip:active{transform:scale(.96);}
+
+.autosave-pill{font-size:.56rem;color:var(--dim);font-weight:700;display:flex;align-items:center;gap:3px;opacity:0;transition:opacity .4s;}
+.autosave-pill.show{opacity:1;}
+.autosave-dot{width:5px;height:5px;border-radius:50%;background:var(--b2);}
+.autosave-dot.saving{background:var(--a);animation:pulse .8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.ftb-actions{margin-left:auto;display:flex;gap:5px;}
+.ftb-btn{background:none;border:2px solid var(--a3);border-radius:10px;width:32px;height:32px;cursor:pointer;font-size:.88rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.ftb-btn:active{background:var(--a3);}
+.ftb-btn.save-btn{border-color:var(--b2);}
+
+/* MESSAGES */
+.msgs{flex:1;overflow-y:auto;padding:11px 11px 6px;display:flex;flex-direction:column;gap:11px;min-height:0;}
+.msgs::-webkit-scrollbar{width:3px;}
+.msgs::-webkit-scrollbar-thumb{background:linear-gradient(var(--a2),var(--b2));border-radius:3px;}
+.msgs-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;padding:22px 16px;}
+.mw-em{font-size:2.6rem;margin-bottom:9px;animation:bob 3s ease-in-out infinite;}
+.mw-title{font-family:'Pacifico',cursive;font-size:.88rem;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
+.mw-text{font-size:.74rem;color:var(--dim);line-height:1.8;}
+.mw-tip{margin-top:10px;padding:8px 13px;border-radius:13px;background:var(--a3);border:1.5px solid var(--a2);font-size:.68rem;color:var(--a);font-weight:700;}
+.mw-persona-chip{margin-top:7px;padding:6px 13px;border-radius:13px;background:linear-gradient(135deg,rgba(194,100,240,.1),rgba(255,110,180,.07));border:1.5px solid var(--b2);font-size:.68rem;color:var(--b);font-weight:800;display:flex;align-items:center;gap:5px;}
+.mw-scenario-chip{margin-top:6px;padding:6px 13px;border-radius:13px;background:var(--b3);border:1.5px solid var(--b2);font-size:.68rem;color:var(--b);font-weight:800;}
+
+.msg{display:flex;gap:7px;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{flex-direction:row-reverse;}
+.mav{width:29px;height:29px;border-radius:50%;flex-shrink:0;align-self:flex-end;display:flex;align-items:center;justify-content:center;font-size:.82rem;box-shadow:0 2px 8px var(--shadow);}
+.msg.ai .mav{background:linear-gradient(135deg,var(--a),var(--b));}
+.msg.u .mav{background:linear-gradient(135deg,var(--b2),var(--a2));}
+.mbody{display:flex;flex-direction:column;gap:3px;max-width:82%;}
+.msg.u .mbody{align-items:flex-end;}
+.mname{font-size:.57rem;color:var(--dim);font-weight:800;letter-spacing:.5px;padding:0 4px;}
+.bbl{padding:9px 13px;border-radius:17px;font-size:.83rem;line-height:1.7;word-break:break-word;}
+.msg.ai .bbl{background:var(--msg-ai-bg);border:2px solid var(--msg-ai-border);border-bottom-left-radius:4px;color:var(--text);}
+.msg.u .bbl{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border-bottom-right-radius:4px;box-shadow:0 4px 14px var(--shadow);}
+.typing{display:flex;gap:5px;align-items:center;padding:3px 0;}
+.dot{width:7px;height:7px;border-radius:50%;animation:bnc 1.2s ease-in-out infinite;}
+.dot:nth-child(1){background:var(--a);}
+.dot:nth-child(2){background:var(--b);animation-delay:.2s;}
+.dot:nth-child(3){background:var(--a2);animation-delay:.4s;}
+@keyframes bnc{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+
+/* INPUT */
+.input-wrap{padding:9px 11px 16px;flex-shrink:0;background:linear-gradient(0deg,rgba(253,240,255,.97),rgba(255,255,255,.88));backdrop-filter:blur(16px);border-top:2px solid var(--a3);transition:all .4s;}
+body.t-dark .input-wrap{background:linear-gradient(0deg,rgba(14,8,20,.97),rgba(26,8,40,.88));}
+.input-box{border-radius:20px;padding:10px 14px 12px;border:2.5px solid var(--a2);background:var(--input-bg);box-shadow:0 4px 18px var(--shadow);display:flex;flex-direction:column;gap:6px;transition:all .3s;}
+.input-box:focus-within{border-color:var(--b);box-shadow:0 4px 22px var(--shadow);}
+.ita{width:100%;background:transparent;border:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:.87rem;resize:none;outline:none;line-height:1.7;min-height:70px;max-height:140px;}
+.ita::placeholder{color:var(--a2);}
+.input-footer{display:flex;align-items:center;justify-content:space-between;}
+.inp-hint{font-size:.6rem;color:var(--dim);font-weight:700;}
+.send-btn{padding:7px 16px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:800;cursor:pointer;transition:all .25s;box-shadow:0 4px 14px var(--shadow);display:flex;align-items:center;gap:4px;}
+.send-btn:active{transform:scale(.95);}
+.send-btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* DRAWER */
+.drawer-ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0);pointer-events:none;transition:background .3s;}
+.drawer-ov.on{background:rgba(0,0,0,.45);pointer-events:all;backdrop-filter:blur(3px);}
+.drawer{position:fixed;top:0;right:0;height:100%;width:82%;max-width:310px;background:var(--bg);border-left:2px solid var(--a3);transform:translateX(100%);transition:transform .38s cubic-bezier(.16,1,.3,1);z-index:201;display:flex;flex-direction:column;box-shadow:-8px 0 30px var(--shadow);}
+.drawer-ov.on .drawer{transform:translateX(0);}
+.drawer-head{padding:16px 14px 13px;border-bottom:2px solid var(--a3);display:flex;align-items:center;gap:9px;}
+.dh-logo{font-size:1.3rem;animation:bob 3s ease-in-out infinite;}
+.dh-title{font-family:'Pacifico',cursive;font-size:.9rem;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.drawer-close{margin-left:auto;background:none;border:2px solid var(--a3);border-radius:9px;width:29px;height:29px;cursor:pointer;font-size:.88rem;color:var(--dim);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.drawer-close:active{background:var(--a3);color:var(--a);}
+.drawer-body{flex:1;overflow-y:auto;padding:11px 9px;}
+.hist-empty{text-align:center;padding:32px 12px;color:var(--dim);}
+.hist-empty-em{font-size:2rem;display:block;margin-bottom:7px;}
+.hist-empty-txt{font-size:.74rem;line-height:1.8;}
+.hi{border-radius:15px;padding:11px 11px;margin-bottom:8px;cursor:pointer;border:2px solid var(--a3);background:var(--card-bg);transition:all .25s;position:relative;}
+.hi:active{transform:scale(.98);border-color:var(--a2);}
+.hi-top{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.hi-badge{padding:2px 8px;border-radius:8px;font-size:.6rem;font-weight:800;border:1.5px solid;}
+.hi-date{font-size:.58rem;color:var(--dim);margin-left:auto;font-weight:700;}
+.hi-title{font-size:.8rem;font-weight:800;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:20px;}
+.hi-preview{font-size:.68rem;color:var(--dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.hi-del{position:absolute;top:8px;right:8px;background:none;border:none;font-size:.76rem;cursor:pointer;color:var(--a2);padding:3px;border-radius:6px;}
+.hi-del:active{color:var(--a);background:var(--a3);}
+
+/* MODALS */
+.modal-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-ov.on{opacity:1;pointer-events:all;}
+.modal{background:var(--bg);border:2px solid var(--a3);border-radius:28px 28px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .42s cubic-bezier(.16,1,.3,1);padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));}
+.modal-ov.on .modal{transform:translateY(0);}
+.modal::-webkit-scrollbar{width:3px;}
+.modal::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px;}
+.modal-hdr{position:sticky;top:0;z-index:10;background:var(--hdr-bg);backdrop-filter:blur(12px);padding:13px 17px 11px;border-bottom:2px solid var(--a3);}
+.modal-handle{width:34px;height:4px;border-radius:2px;background:var(--a3);margin:0 auto 11px;}
+.modal-hdr-row{display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Pacifico',cursive;font-size:.95rem;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.modal-close{background:none;border:2px solid var(--a3);border-radius:9px;width:30px;height:30px;cursor:pointer;font-size:.88rem;color:var(--dim);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:active{background:var(--a3);}
+
+/* PERSONA TABS */
+.persona-tabs{display:flex;overflow-x:auto;gap:5px;padding:11px 15px 0;scrollbar-width:none;}
+.persona-tabs::-webkit-scrollbar{display:none;}
+.ptab{flex-shrink:0;padding:6px 13px;border-radius:18px;border:2px solid var(--a3);background:transparent;color:var(--dim);font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;}
+.ptab.on{border-color:var(--b);background:var(--b3);color:var(--b);}
+.ptab-del{background:none;border:none;cursor:pointer;color:var(--a2);font-size:.78rem;padding:1px 2px;}
+.ptab-add{border-style:dashed;color:var(--a);border-color:var(--a2);}
+
+/* PERSONA PREVIEW */
+.persona-preview{margin:11px 15px 0;border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,rgba(194,100,240,.07),rgba(255,110,180,.05));border:2px solid var(--b2);}
+.pp-top{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.pp-av{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 2px 10px var(--shadow);}
+.pp-name{font-size:.9rem;font-weight:800;color:var(--text);}
+.pp-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;}
+.pp-tag{padding:2px 7px;border-radius:7px;font-size:.58rem;font-weight:800;background:var(--b3);color:var(--b);border:1px solid var(--b2);}
+.pp-desc{font-size:.7rem;color:var(--dim);line-height:1.6;}
+
+/* PERSONA FORM */
+.persona-form{padding:13px 15px;}
+.pf-section{margin-bottom:15px;}
+.pf-section-title{display:flex;align-items:center;gap:6px;margin-bottom:9px;padding-bottom:5px;border-bottom:1.5px solid var(--a3);}
+.pf-section-em{font-size:.9rem;}
+.pf-section-label{font-size:.64rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);font-weight:800;}
+.fg{margin-bottom:8px;}
+.fg label{display:block;font-size:.64rem;color:var(--dim);margin-bottom:4px;letter-spacing:.4px;font-weight:800;}
+.fg input,.fg textarea{width:100%;background:var(--input-bg);border:2px solid var(--a3);border-radius:12px;padding:8px 11px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s;}
+.fg textarea{resize:vertical;min-height:64px;line-height:1.6;}
+.fg input:focus,.fg textarea:focus{border-color:var(--b2);}
+.chip-group{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.chip{padding:4px 10px;border-radius:10px;border:2px solid var(--a3);background:transparent;color:var(--dim);font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.chip.on{border-color:var(--b2);background:var(--b3);color:var(--b);}
+
+.persona-use-row{margin:10px 15px 0;display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:13px;background:var(--a3);border:1.5px solid var(--a2);}
+.pur-label{font-size:.7rem;color:var(--a);font-weight:800;flex:1;}
+.pur-toggle{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border:none;border-radius:9px;padding:5px 13px;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;cursor:pointer;transition:all .2s;}
+
+.modal-actions{display:flex;gap:8px;padding:11px 15px 0;}
+.btn-cancel{flex:1;padding:10px;border-radius:13px;border:2px solid var(--a3);background:transparent;color:var(--dim);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;transition:all .2s;}
+.btn-cancel:active{border-color:var(--a);color:var(--a);}
+.btn-save{flex:2;padding:10px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;box-shadow:0 4px 14px var(--shadow);transition:all .2s;}
+.btn-save:active{transform:scale(.97);}
+
+/* THEME MODAL */
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px 16px;}
+.theme-card{border-radius:18px;padding:14px 13px;cursor:pointer;border:2.5px solid transparent;transition:all .25s;display:flex;align-items:center;gap:10px;position:relative;}
+.theme-card:active{transform:scale(.97);}
+.theme-card.on{box-shadow:0 0 0 3px rgba(0,0,0,.15);}
+.tc-swatch{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.tc-name{font-size:.8rem;font-weight:800;}
+.tc-sub{font-size:.63rem;margin-top:1px;opacity:.7;}
+.tc-check{position:absolute;top:8px;right:10px;font-size:.9rem;display:none;}
+.theme-card.on .tc-check{display:block;}
+
+/* SAVE MODAL */
+.save-modal-ov{position:fixed;inset:0;z-index:310;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.save-modal-ov.on{opacity:1;pointer-events:all;}
+.save-modal{background:var(--bg);border:2px solid var(--a3);border-radius:26px 26px 0 0;padding:18px 17px calc(22px + env(safe-area-inset-bottom,0px));width:100%;max-width:480px;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+.save-modal-ov.on .save-modal{transform:translateY(0);}
+.sm-handle{width:34px;height:4px;border-radius:2px;background:var(--a3);margin:0 auto 14px;}
+.sm-title{font-family:'Pacifico',cursive;font-size:.95rem;text-align:center;margin-bottom:13px;background:linear-gradient(135deg,var(--a),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sm-label{font-size:.68rem;color:var(--dim);font-weight:800;letter-spacing:.5px;margin-bottom:5px;}
+.sm-input{width:100%;background:var(--input-bg);border:2px solid var(--a3);border-radius:12px;padding:9px 12px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;outline:none;}
+.sm-input:focus{border-color:var(--b2);}
+.sm-actions{display:flex;gap:7px;margin-top:13px;}
+.sm-canc{flex:1;padding:10px;border-radius:12px;border:2px solid var(--a3);background:transparent;color:var(--dim);cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:700;}
+.sm-save{flex:2;padding:10px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;box-shadow:0 4px 14px var(--shadow);}
+
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(16px);background:linear-gradient(135deg,var(--a),var(--b));color:#fff;padding:8px 18px;border-radius:16px;font-size:.76rem;font-weight:800;z-index:500;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 6px 18px var(--shadow);}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.badge-romance{border-color:#ffb8d9;background:#fff0f6;color:#c2185b;}
+.badge-bl{border-color:#b8c8ff;background:#f0f4ff;color:#3949ab;}
+.badge-gl{border-color:#c8b8ff;background:#f5f0ff;color:#7b1fa2;}
+.badge-hot{border-color:#ffb8a0;background:#fff4f0;color:#e64a19;}
+.badge-dark{border-color:#c0b8d0;background:#f0f0f5;color:#37274f;}
+.badge-fantasy{border-color:#a8e6c0;background:#f0fff4;color:#1b5e20;}
+.badge-drama{border-color:#ffd080;background:#fffbf0;color:#e65100;}
+.badge-suspense{border-color:#c8b0b0;background:#f5f0f0;color:#4a1515;}
+
+/* ══ VOICE BUTTON ══ */
+.voice-btn{width:36px;height:36px;border-radius:50%;border:2px solid var(--a2);background:transparent;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:all .25s;flex-shrink:0;}
+.voice-btn:active{transform:scale(.93);}
+.voice-btn.recording{background:linear-gradient(135deg,var(--a),var(--b));border-color:var(--a);animation:voicePulse .8s ease-in-out infinite;}
+@keyframes voicePulse{0%,100%{box-shadow:0 0 0 0 var(--shadow)}50%{box-shadow:0 0 0 8px rgba(0,0,0,0)}}
+.voice-wave{display:none;align-items:center;gap:3px;height:20px;}
+.voice-wave.on{display:flex;}
+.vw-bar{width:3px;border-radius:3px;background:var(--a);animation:waveBar .6s ease-in-out infinite;}
+.vw-bar:nth-child(1){height:8px;animation-delay:0s;}
+.vw-bar:nth-child(2){height:14px;animation-delay:.1s;}
+.vw-bar:nth-child(3){height:20px;animation-delay:.2s;}
+.vw-bar:nth-child(4){height:14px;animation-delay:.3s;}
+.vw-bar:nth-child(5){height:8px;animation-delay:.4s;}
+@keyframes waveBar{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+
+/* ══ SUGGESTIONS ══ */
+.suggestions-wrap{padding:4px 11px 0;display:none;gap:6px;flex-wrap:wrap;}
+.suggestions-wrap.show{display:flex;}
+.sug-btn{padding:5px 12px;border-radius:14px;border:1.5px solid var(--a2);background:var(--a3);color:var(--a);font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.sug-btn:active{background:var(--a);color:#fff;transform:scale(.96);}
+.sug-loading{font-size:.68rem;color:var(--dim);font-weight:700;display:flex;align-items:center;gap:5px;}
+
+/* ══ RPG MODE ══ */
+.rpg-toggle-bar{padding:7px 12px;background:var(--hdr-bg);border-bottom:1.5px solid var(--a3);display:flex;align-items:center;gap:8px;flex-shrink:0;transition:all .4s;}
+.rpg-toggle-label{font-size:.68rem;font-weight:800;color:var(--dim);flex:1;}
+.rpg-toggle-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:14px;border:2px solid var(--a3);background:transparent;color:var(--dim);font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:800;cursor:pointer;transition:all .25s;}
+.rpg-toggle-btn.on{border-color:var(--b);background:var(--b3);color:var(--b);}
+.rpg-toggle-btn:active{transform:scale(.96);}
+.rpg-indicator{width:7px;height:7px;border-radius:50%;background:var(--dim);transition:all .3s;}
+.rpg-toggle-btn.on .rpg-indicator{background:var(--b);}
+
+/* RPG character cards inside chat */
+.rpg-chars-bar{padding:8px 11px;display:none;flex-wrap:wrap;gap:7px;border-bottom:1.5px solid var(--a3);background:var(--hdr-bg);flex-shrink:0;}
+.rpg-chars-bar.show{display:flex;}
+.rpg-char-card{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:14px;border:2px solid var(--a3);background:var(--card-bg);cursor:pointer;transition:all .2s;flex-shrink:0;}
+.rpg-char-card:active{border-color:var(--b);background:var(--b3);}
+.rpg-char-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
+.rpg-char-name{font-size:.72rem;font-weight:800;color:var(--text);}
+.rpg-char-role{font-size:.6rem;color:var(--dim);}
+.rpg-add-char{border-style:dashed;border-color:var(--b2);color:var(--b);}
+.rpg-add-char:active{background:var(--b3);}
+
+/* RPG message — character speaks */
+.msg.rpg-char .mav{background:linear-gradient(135deg,#e06030,#c030a0);}
+.msg.rpg-char .bbl{background:linear-gradient(135deg,rgba(224,96,48,.1),rgba(192,48,160,.08));border:2px solid rgba(224,96,48,.25);border-bottom-left-radius:4px;color:var(--text);}
+.msg.rpg-char .mname{color:#c060a0;}
+
+/* RPG Create char modal */
+.rpg-modal{max-height:85vh;}
+
+*::-webkit-scrollbar{width:4px;}*::-webkit-scrollbar-track{background:transparent;}*::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px;}
+</style>
+</head>
+<body class="t-rose">
+<div class="shape sh1"></div><div class="shape sh2"></div>
+<div id="app">
+  <!-- HEADER -->
+  <header class="hdr">
+    <div class="hdr-logo">🦄</div>
+    <div><div class="hdr-title">UniVerse</div><div class="hdr-sub">✦ FANFIC & HISTÓRIAS ✦</div></div>
+    <div class="hdr-btns">
+      <button class="hdr-btn persona-btn" id="persona-hdr-btn" onclick="openPersonaModal()">
+        <div class="persona-dot"></div>🎭
+      </button>
+      <button class="hdr-btn" onclick="openDrawer()">📚 <span class="badge-num" id="hist-count">0</span></button>
+      <button class="hdr-btn" onclick="openThemeModal()" title="Tema">🎨</button>
+      <button class="hdr-btn" onclick="openKeyModal()" title="Configurar Chave Gemini" id="key-btn">🔑</button>
+    </div>
+  </header>
+
+  <!-- HOME -->
+  <div class="pg on" id="pg-home">
+
+    <div class="persona-home-card" id="persona-home-card" onclick="openPersonaModal()">
+      <div class="phc-av" id="phc-av">🎭</div>
+      <div class="phc-info"><div class="phc-name" id="phc-name">Criar sua Persona</div><div class="phc-sub" id="phc-sub">A IA usará sua persona na história</div></div>
+      <div class="phc-arrow">›</div>
+    </div>
+    <div class="sec-title"><span class="sec-em">📖</span><span class="sec-label">Escolha o gênero</span><div class="sec-line"></div></div>
+    <div class="genre-grid">
+      <div class="gc romance" data-sparkle="💕" onclick="goFanfic('Romance','💕','romance')"><span class="gc-em">🌹</span><div class="gc-name">Romance</div><div class="gc-desc">Amor, paixão e sentimentos</div></div>
+      <div class="gc bl" data-sparkle="💙" onclick="goFanfic('BL','💙','bl')"><span class="gc-em">💙</span><div class="gc-name">BL</div><div class="gc-desc">Boys Love, rivais, tensão</div></div>
+      <div class="gc gl" data-sparkle="💜" onclick="goFanfic('GL','💜','gl')"><span class="gc-em">💜</span><div class="gc-name">GL</div><div class="gc-desc">Girls Love, paixão intensa</div></div>
+      <div class="gc hot" data-sparkle="🔥" onclick="goFanfic('Hot','🔥','hot')"><span class="gc-em">🔥</span><div class="gc-name">Hot</div><div class="gc-desc">Tensão e sensualidade</div></div>
+      <div class="gc dark" data-sparkle="🖤" onclick="goFanfic('Dark','🖤','dark')"><span class="gc-em">🖤</span><div class="gc-name">Dark</div><div class="gc-desc">Obsessão, sombra, vilões</div></div>
+      <div class="gc fantasy" data-sparkle="✨" onclick="goFanfic('Fantasia','✨','fantasy')"><span class="gc-em">🧝</span><div class="gc-name">Fantasia</div><div class="gc-desc">Magia, mundos, aventura</div></div>
+      <div class="gc drama" data-sparkle="🎭" onclick="goFanfic('Drama','🎭','drama')"><span class="gc-em">🎭</span><div class="gc-name">Drama</div><div class="gc-desc">Emoção, conflito, lágrimas</div></div>
+      <div class="gc suspense" data-sparkle="🔍" onclick="goFanfic('Suspense','🔍','suspense')"><span class="gc-em">🔮</span><div class="gc-name">Suspense</div><div class="gc-desc">Mistério e tensão</div></div>
+    </div>
+  </div>
+
+  <!-- FANFIC PAGE -->
+  <div class="pg" id="pg-fanfic">
+    <div class="fanfic-topbar">
+      <button class="ftb-back" onclick="goHome()">‹</button>
+      <div class="ftb-badge" id="ftb-badge"><span id="ftb-em">📖</span><span id="ftb-label">Fanfic</span></div>
+      <div class="autosave-pill" id="autosave-pill"><div class="autosave-dot" id="autosave-dot"></div><span id="autosave-txt">salvo</span></div>
+      <div class="ftb-actions">
+        <button class="ftb-btn save-btn" onclick="openSaveModal()" title="Salvar">💾</button>
+        <button class="ftb-btn" onclick="clearChat()" title="Limpar">🗑️</button>
+      </div>
+    </div>
+    <!-- SCENARIO BAR -->
+    <div class="scenario-bar" id="scenario-bar">
+      <span class="scenario-bar-label">🏞️ Cenário:</span>
+    </div>
+    <!-- RPG TOGGLE BAR -->
+    <div class="rpg-toggle-bar">
+      <span class="rpg-toggle-label">⚔️ Modo Roleplay/RPG</span>
+      <button class="rpg-toggle-btn" id="rpg-toggle-btn" onclick="toggleRPG()">
+        <div class="rpg-indicator"></div>
+        <span id="rpg-toggle-txt">Desativado</span>
+      </button>
+    </div>
+    <!-- RPG CHARS BAR -->
+    <div class="rpg-chars-bar" id="rpg-chars-bar"></div>
+    <div class="msgs" id="fanfic-msgs">
+      <div class="msgs-welcome" id="msgs-welcome">
+        <div class="mw-em">✍️</div>
+        <div class="mw-title">Vamos escrever!</div>
+        <p class="mw-text">Escolha um cenário acima e descreva o que acontece. A IA narra com sua persona! 🌟</p>
+        <div class="mw-tip">💡 As histórias são salvas automaticamente!</div>
+      </div>
+    </div>
+    <div class="input-wrap">
+      <!-- SUGGESTIONS -->
+      <div class="suggestions-wrap" id="suggestions-wrap">
+        <span class="sug-loading" id="sug-loading" style="display:none">✦ gerando ideias...</span>
+      </div>
+      <div class="input-box">
+        <div class="input-footer">
+          <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" title="Gravar voz">🎙️</button>
+          <div class="voice-wave" id="voice-wave"><div class="vw-bar"></div><div class="vw-bar"></div><div class="vw-bar"></div><div class="vw-bar"></div><div class="vw-bar"></div></div>
+          <span class="inp-hint" id="inp-hint-txt">Shift+Enter = linha</span>
+          <button class="send-btn" id="fanfic-snd" onclick="sendFanfic()"><span>Enviar</span><span>✦</span></button>
+        </div>
+        <textarea class="ita" id="fanfic-inp" placeholder="Descreva a cena, o que acontece... ✨" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFanfic()}" oninput="onInputTyping()"></textarea>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY DRAWER -->
+<div class="drawer-ov" id="drawer-ov" onclick="if(event.target===this)closeDrawer()">
+  <div class="drawer">
+    <div class="drawer-head"><span class="dh-logo">📚</span><span class="dh-title">Histórico</span><button class="drawer-close" onclick="closeDrawer()">✕</button></div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </div>
+</div>
+
+<!-- PERSONA MODAL -->
+<div class="modal-ov" id="persona-modal-ov" onclick="if(event.target===this)closePersonaModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-handle"></div>
+      <div class="modal-hdr-row"><div class="modal-title">🎭 Minhas Personas</div><button class="modal-close" onclick="closePersonaModal()">✕</button></div>
+    </div>
+    <div class="persona-tabs" id="persona-tabs"></div>
+    <div class="persona-preview" id="persona-preview" style="display:none">
+      <div class="pp-top"><div class="pp-av" id="pp-av">🌸</div><div><div class="pp-name" id="pp-name-disp">—</div><div class="pp-tags" id="pp-tags"></div></div></div>
+      <div class="pp-desc" id="pp-desc-disp"></div>
+    </div>
+    <div class="persona-use-row" id="persona-use-row" style="display:none">
+      <span class="pur-label" id="pur-label">Usar esta persona?</span>
+      <button class="pur-toggle" id="pur-toggle" onclick="toggleActivePersona()">Ativar ✦</button>
+    </div>
+    <div class="persona-form">
+      <!-- AVATAR SECTION -->
+      <div class="pf-section">
+        <div class="pf-section-title"><span class="pf-section-em">🖼️</span><span class="pf-section-label">Meu Avatar</span></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+          <div id="pf-av-preview" onclick="document.getElementById('pf-av-file').click()" style="width:64px;height:64px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--a),var(--b));display:flex;align-items:center;justify-content:center;font-size:1.8rem;overflow:hidden;box-shadow:0 3px 12px var(--shadow);cursor:pointer;border:3px solid var(--b2);">🌸</div>
+          <div style="flex:1;">
+            <div style="font-size:.72rem;font-weight:800;color:var(--dim);margin-bottom:6px;">ESCOLHER EMOJI</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;" id="pf-av-emojis"></div>
+          </div>
+        </div>
+        <!-- FOTO -->
+        <label style="display:flex;align-items:center;gap:8px;padding:10px 13px;border-radius:14px;border:2px dashed var(--a2);background:transparent;cursor:pointer;transition:all .2s;" for="pf-av-file">
+          <span style="font-size:1.2rem;">📷</span>
+          <div>
+            <div style="font-size:.78rem;font-weight:800;color:var(--a);">Usar foto da galeria</div>
+            <div style="font-size:.62rem;color:var(--dim);">Toque aqui para escolher</div>
+          </div>
+        </label>
+        <input type="file" id="pf-av-file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;" onchange="handlePersonaPhoto(event)"/>
+      </div>
+      <div class="pf-section">
+        <div class="pf-section-title"><span class="pf-section-em">✨</span><span class="pf-section-label">Identidade</span></div>
+        <div class="fg"><label>NOME</label><input type="text" id="pf-name" placeholder="Ex: Aria, Kai, Luna..."/></div>
+        <div class="fg"><label>IDADE</label><input type="text" id="pf-age" placeholder="Ex: 19 anos..."/></div>
+        <div class="fg"><label>GÊNERO / IDENTIDADE</label><input type="text" id="pf-gender-txt" placeholder="Livre ou escolha abaixo..."/><div class="chip-group" id="gender-chips"></div></div>
+        <div class="fg"><label>ORIENTAÇÃO SEXUAL</label><input type="text" id="pf-orientation-txt" placeholder="Livre ou escolha abaixo..."/><div class="chip-group" id="orient-chips"></div></div>
+      </div>
+      <div class="pf-section">
+        <div class="pf-section-title"><span class="pf-section-em">🌸</span><span class="pf-section-label">Aparência</span></div>
+        <div class="fg"><label>DESCRIÇÃO FÍSICA</label><textarea id="pf-appearance" placeholder="Cabelo, olhos, altura, traços..."></textarea></div>
+        <div class="fg"><label>ESTILO / ESTÉTICA</label><input type="text" id="pf-style" placeholder="Livre ou escolha abaixo..."/><div class="chip-group" id="style-chips"></div></div>
+      </div>
+      <div class="pf-section">
+        <div class="pf-section-title"><span class="pf-section-em">💫</span><span class="pf-section-label">Personalidade</span></div>
+        <div class="fg"><label>COMO VOCÊ É</label><textarea id="pf-personality" placeholder="Jeito de ser, medos, desejos..."></textarea></div>
+        <div class="fg"><label>TRAÇOS RÁPIDOS</label><div class="chip-group" id="trait-chips"></div></div>
+      </div>
+      <div class="pf-section">
+        <div class="pf-section-title"><span class="pf-section-em">📖</span><span class="pf-section-label">História</span></div>
+        <div class="fg"><label>BACKGROUND / ORIGEM</label><textarea id="pf-background" placeholder="Família, onde cresceu..."></textarea></div>
+        <div class="fg"><label>MOTIVAÇÕES E SEGREDOS</label><textarea id="pf-secrets" placeholder="O que te move, segredos..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePersonaModal()">Cancelar</button>
+      <button class="btn-save" onclick="savePersona()">🌸 Salvar Persona</button>
+    </div>
+  </div>
+</div>
+
+<!-- THEME MODAL -->
+<div class="modal-ov" id="theme-modal-ov" onclick="if(event.target===this)closeThemeModal()">
+  <div class="modal" style="max-height:80vh">
+    <div class="modal-hdr">
+      <div class="modal-handle"></div>
+      <div class="modal-hdr-row"><div class="modal-title">🎨 Tema do App</div><button class="modal-close" onclick="closeThemeModal()">✕</button></div>
+    </div>
+    <div class="theme-grid" id="theme-grid"></div>
+  </div>
+</div>
+
+
+<!-- RPG CHAR MODAL -->
+<div class="modal-ov" id="rpg-modal-ov" onclick="if(event.target===this)closeRpgModal()">
+  <div class="modal rpg-modal">
+    <div class="modal-hdr">
+      <div class="modal-handle"></div>
+      <div class="modal-hdr-row"><div class="modal-title">⚔️ Criar Personagem</div><button class="modal-close" onclick="closeRpgModal()">✕</button></div>
+    </div>
+    <div class="persona-form">
+      <div class="fg"><label>NOME DO PERSONAGEM</label><input type="text" id="rc-name" placeholder="Ex: Lord Aken, Serafina, Vírus..."/></div>
+      <div class="fg"><label>EMOJI / AVATAR</label><div class="chip-group" id="rc-emoji-grid"></div></div>
+      <div class="fg"><label>PAPEL NA HISTÓRIA</label><input type="text" id="rc-role" placeholder="Ex: vilão sedutor, aliado misterioso, rival..."/></div>
+      <div class="fg"><label>PERSONALIDADE</label><textarea id="rc-personality" placeholder="Como ele/ela age, fala, reage..."></textarea></div>
+      <div class="fg"><label>FALA / VOZ</label><div class="chip-group" id="rc-voice-chips"></div></div>
+      <div class="fg"><label>SEGREDO / OBJETIVO</label><input type="text" id="rc-secret" placeholder="O que quer, o que esconde..."/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeRpgModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveRpgChar()">⚔️ Criar Personagem</button>
+    </div>
+  </div>
+</div>
+<!-- AVATAR PICKER SHEET -->
+<div class="av-pick-ov" id="av-pick-ov" onclick="if(event.target===this)closeAvPicker()">
+  <div class="av-pick-sheet">
+    <div class="av-pick-hdr">
+      <div class="av-pick-handle" style="position:absolute;top:10px;left:50%;transform:translateX(-50%);"></div>
+      <div class="av-pick-title" id="av-pick-title">🖼️ Alterar Avatar</div>
+      <button class="av-pick-close" onclick="closeAvPicker()">✕</button>
+    </div>
+    <div class="av-pick-tabs">
+      <button class="av-tab on" id="av-tab-emoji" onclick="switchAvTab('emoji')">😊 Emoji</button>
+      <button class="av-tab" id="av-tab-photo" onclick="switchAvTab('photo')">📷 Foto</button>
+    </div>
+    <!-- EMOJI PANEL -->
+    <div class="av-emoji-panel" id="av-emoji-panel">
+      <div class="av-emoji-grid" id="av-emoji-grid"></div>
+    </div>
+    <!-- PHOTO PANEL -->
+    <div class="av-photo-panel" id="av-photo-panel" style="display:none">
+      <div class="av-photo-preview" id="av-photo-preview">📷</div>
+      <label class="av-photo-btn" for="av-file-inp" style="display:block;text-align:center;cursor:pointer;">
+        📁 Escolher foto da galeria
+      </label>
+      <input type="file" id="av-file-inp" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;" onchange="handleAvPhoto(event)"/>
+      <p style="text-align:center;font-size:.65rem;color:var(--dim);font-weight:700;">Toque no botão acima para abrir a galeria</p>
+    </div>
+    <div class="av-actions">
+      <button class="av-cancel" onclick="closeAvPicker()">Cancelar</button>
+      <button class="av-apply" onclick="applyAvatar()">✦ Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SAVE MODAL -->
+<div class="save-modal-ov" id="save-modal-ov" onclick="if(event.target===this)closeSaveModal()">
+  <div class="save-modal">
+    <div class="sm-handle"></div>
+    <div class="sm-title">💾 Salvar História</div>
+    <div class="sm-label">TÍTULO</div>
+    <input class="sm-input" id="sm-title-inp" placeholder="Ex: A Noite dos Segredos..."/>
+    <div class="sm-actions">
+      <button class="sm-canc" onclick="closeSaveModal()">Cancelar</button>
+      <button class="sm-save" onclick="saveStory()">✦ Salvar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STARS ──
+(()=>{const ch=['✦','✧','⋆','✩','＊','·'];for(let i=0;i<14;i++){const s=document.createElement('div');s.className='star';s.textContent=ch[Math.floor(Math.random()*ch.length)];const sz=Math.random()*9+6;s.style.cssText=`top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s;font-size:${sz}px;`;document.body.appendChild(s);}})();
+
+// ── THEMES ──
+const THEMES=[
+  {id:'t-rose',name:'Rosa & Lilás',sub:'Fofo clássico',em:'🌸',bg:'#fdf0ff',a:'#ff6eb4',b:'#c264f0'},
+  {id:'t-baby',name:'Azul Bebê',sub:'Delicado e suave',em:'🩵',bg:'#f0f6ff',a:'#5b9df5',b:'#7b6ef0'},
+  {id:'t-mint',name:'Verde Menta',sub:'Fresco e natural',em:'🌿',bg:'#f0fff8',a:'#3ecfa0',b:'#2db08a'},
+  {id:'t-dark',name:'Dark Roxo',sub:'Intenso e misterioso',em:'🌑',bg:'#0e0814',a:'#c264f0',b:'#ff6eb4'},
+  {id:'t-peach',name:'Laranja Pêssego',sub:'Quente e vibrante',em:'🍑',bg:'#fff8f0',a:'#ff8c5a',b:'#e06030'},
+  {id:'t-red',name:'Vermelho Rosa',sub:'Apaixonado e intenso',em:'❤️',bg:'#fff0f2',a:'#f03060',b:'#c01040'},
+  {id:'t-gold',name:'Dourado & Bege',sub:'Elegante e suave',em:'✨',bg:'#fffbf0',a:'#d4a020',b:'#b08000'},
+  {id:'t-navy',name:'Azul Marinho',sub:'Sério e sofisticado',em:'🌊',bg:'#f0f2ff',a:'#3050d0',b:'#1030b0'},
+  {id:'t-emerald',name:'Verde Esmeralda',sub:'Luxuoso e vivo',em:'💚',bg:'#f0fdf6',a:'#20a860',b:'#008040'},
+  {id:'t-silver',name:'Cinza & Prata',sub:'Minimalista e clean',em:'🩶',bg:'#f6f6f8',a:'#7080a0',b:'#506080'},
+];
+let currentTheme=localStorage.getItem('uv_theme')||'t-rose';
+
+function applyTheme(id){
+  THEMES.forEach(t=>document.body.classList.remove(t.id));
+  document.body.classList.add(id);
+  currentTheme=id;localStorage.setItem('uv_theme',id);
+  renderThemeGrid();
+}
+function openThemeModal(){renderThemeGrid();document.getElementById('theme-modal-ov').classList.add('on');}
+function closeThemeModal(){document.getElementById('theme-modal-ov').classList.remove('on');}
+function renderThemeGrid(){
+  const g=document.getElementById('theme-grid');
+  g.innerHTML=THEMES.map(t=>`
+    <div class="theme-card${currentTheme===t.id?' on':''}" onclick="applyTheme('${t.id}')" style="background:${t.bg};border-color:${t.a}40;">
+      <div class="tc-swatch" style="background:linear-gradient(135deg,${t.a},${t.b})">${t.em}</div>
+      <div><div class="tc-name" style="color:${t.b}">${t.name}</div><div class="tc-sub" style="color:${t.a}">${t.sub}</div></div>
+      <span class="tc-check">✓</span>
+    </div>`).join('');
+}
+
+// ── SCENARIOS ──
+const SCENARIOS=[
+  {id:'none',em:'🚫',name:'Nenhum'},
+  {id:'school',em:'🏫',name:'Escola/Faculdade'},
+  {id:'cafe',em:'☕',name:'Café/Livraria'},
+  {id:'hospital',em:'🏥',name:'Hospital'},
+  {id:'castle',em:'🏰',name:'Castelo Medieval'},
+  {id:'forest',em:'🌲',name:'Floresta Mágica'},
+  {id:'city',em:'🌆',name:'Cidade Grande'},
+  {id:'beach',em:'🏖️',name:'Praia'},
+  {id:'space',em:'🚀',name:'Espaço Sideral'},
+  {id:'japan',em:'⛩️',name:'Japão/Anime'},
+  {id:'mansion',em:'🏚️',name:'Mansão Assombrada'},
+  {id:'office',em:'🏢',name:'Escritório Corporativo'},
+  {id:'fantasy',em:'🐉',name:'Mundo Fantasia'},
+  {id:'apocalypse',em:'💀',name:'Pós-Apocalipse'},
+  {id:'island',em:'🏝️',name:'Ilha Isolada'},
+  {id:'underground',em:'🌑',name:'Mundo Subterrâneo'},
+  {id:'victorian',em:'🎩',name:'Era Vitoriana'},
+  {id:'cyberpunk',em:'🤖',name:'Cyberpunk Futuro'},
+  {id:'village',em:'🌾',name:'Vila no Interior'},
+  {id:'ship',em:'⛵',name:'Navio/Alto Mar'},
+  {id:'palace',em:'👑',name:'Palácio Real'},
+  {id:'circus',em:'🎪',name:'Circo Misterioso'},
+  {id:'underground2',em:'🎵',name:'Underground Musical'},
+  {id:'prison',em:'⛓️',name:'Prisão'},
+  {id:'academy',em:'⚔️',name:'Academia de Magia'},
+];
+let currentScenario='none';
+
+function buildScenarioBar(){
+  const bar=document.getElementById('scenario-bar');
+  let html='<span class="scenario-bar-label">🏞️</span>';
+  SCENARIOS.forEach(s=>{
+    html+=`<button class="sc-chip${currentScenario===s.id?' on':''}" onclick="selectScenario('${s.id}')">${s.em} ${s.name}</button>`;
+  });
+  bar.innerHTML=html;
+}
+function selectScenario(id){
+  currentScenario=id;
+  buildScenarioBar();
+  const s=SCENARIOS.find(x=>x.id===id);
+  if(id!=='none')toast(`${s.em} Cenário: ${s.name}`);
+}
+function getScenarioBlock(){
+  if(currentScenario==='none')return '';
+  const s=SCENARIOS.find(x=>x.id===currentScenario);
+  if(!s)return '';
+  const details={
+    school:'Ambiente escolar ou universitário, corredores, salas de aula, cantina, biblioteca. Clima jovem, rotinas e hierarquias estudantis.',
+    cafe:'Café aconchegante ou livraria com luz quente, cheiro de café, músicas suaves, estantes de livros, mesa perto da janela com chuva.',
+    hospital:'Hospital com corredores brancos, cheiro de antisséptico, tensão silenciosa, médicos e enfermeiros, UTI, quartos particulares.',
+    castle:'Castelo medieval com salões imensos, tochas nas paredes, banquetes, cavaleiros, dungeons, jardins murados e segredos nas pedras.',
+    forest:'Floresta mágica com árvores centenárias, criaturas místicas, luz filtrada, cogumelos luminosos, sons misteriosos, portais ocultos.',
+    city:'Metrópole moderna com tráfego, arranha-céus, neon, bares noturnos, becos, vida agitada e encontros inesperados nas ruas.',
+    beach:'Praia ao pôr do sol, ondas suaves, areia quente, coqueiros, cabanas rústicas, cheiro de maresia e noites com fogueira.',
+    space:'Nave espacial ou estação orbital, gravidade zero, imensidão do cosmos, planetas distantes, silêncio do espaço, alta tecnologia.',
+    japan:'Japão com templos xintoístas, cerejeiras em flor, quimono, ruas de Tóquio, izakayas, escola de anime com uniformes.',
+    mansion:'Mansão vitoriana assombrada, quartos empoeirados, espelhos que mentem, sussurros nas paredes, portas que se abrem sozinhas.',
+    office:'Escritório corporativo moderno, reuniões de cúpula, rivalidades profissionais, segredos nos elevadores, relações de poder.',
+    fantasy:'Mundo de fantasia épica com reinos em guerra, elfos, dragões, poderes mágicos, profecias e destinos entrelaçados.',
+    apocalypse:'Mundo pós-apocalíptico, cidades em ruínas, escassez de recursos, grupos de sobreviventes, perigos constantes, lealdade à prova.',
+    island:'Ilha tropical isolada, naufrágio ou fuga, praia deserta, cavernas, floresta densa, segredos enterrados na areia.',
+    underground:'Mundo subterrâneo com cidades embaixo da terra, civilizações ocultas, criaturas da escuridão, ausência de céu.',
+    victorian:'Era Vitoriana londrina, névoa, carruagens, bailes de máscaras, sociedades secretas, corsets e segredos da aristocracia.',
+    cyberpunk:'Futuro distópico cyberpunk, implantes neurais, hackers, megacorporações, neons na chuva, bairros marginais e alta tecnologia.',
+    village:'Vila pacata no interior, roças, festas juninas, fofocas, segredos de família, casas antigas e tradições locais.',
+    ship:'Navio em alto mar, tripulação diversa, tempestades, ilhas misteriosas, piratas, segredos nas entranhas do navio.',
+    palace:'Palácio real com intrigas da corte, monarquia, tradições milenares, guardas reais, jardins secretos e romances proibidos.',
+    circus:'Circo misterioso que aparece na cidade, artistas com segredos, magia de verdade, lona repleta de mistérios noturnos.',
+    underground2:'Cena underground musical, shows em galpões, bandas independentes, festas clandestinas, arte de rua e identidades duplas.',
+    prison:'Prisão com hierarquias internas, guardas corruptos, planos de fuga, lealdade entre detentos, segredos que custam vidas.',
+    academy:'Academia de magia com torres antigas, aulas de feitiçaria, duelos de magia, professores enigmáticos e profecias sombrias.',
+    none:''
+  };
+  return `CENÁRIO DA HISTÓRIA: ${s.em} ${s.name}\n${details[id]||''}\nUse este ambiente de forma imersiva e detalhada na narrativa.`;
+}
+
+// ── CHIPS DATA ──
+const GENDER_CHIPS=['Mulher cis','Homem cis','Mulher trans','Homem trans','Não-binário','Gênero fluido','Agênero','Bigênero','Demi-girl','Demi-boy','Travesti','Intersexo'];
+const ORIENT_CHIPS=['Heterossexual','Homossexual','Bissexual','Pansexual','Assexual','Demissexual','Aromântica','Lésbica','Gay','Queer','Omnissexual','Graysexual'];
+const STYLE_CHIPS=['Dark academia','Cottagecore','Y2K','E-girl','E-boy','Grunge','Gótico','Kawaii','Soft girl','Streetwear','Vintage','Boho','Minimalista','Fairycore','Witchcore','Coquette','Mob wife'];
+const TRAIT_CHIPS=['Corajosa','Tímida','Intensa','Misteriosa','Carinhosa','Sarcástica','Impulsiva','Calma','Criativa','Determinada','Sensível','Irônica','Leal','Rebelde','Sonhadora','Fria','Protetora','Caótica'];
+
+function buildChips(cid,data,iid){
+  const c=document.getElementById(cid);c.innerHTML='';
+  data.forEach(d=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=d;
+    b.onclick=()=>{const inp=document.getElementById(iid);const vals=inp.value.trim()?inp.value.split(',').map(x=>x.trim()).filter(Boolean):[];const idx=vals.indexOf(d);if(idx===-1){vals.push(d);b.classList.add('on');}else{vals.splice(idx,1);b.classList.remove('on');}inp.value=vals.join(', ');updatePreview();};
+    c.appendChild(b);
+  });
+}
+function syncChips(cid,iid){const vals=document.getElementById(iid).value.split(',').map(x=>x.trim()).filter(Boolean);document.querySelectorAll('#'+cid+' .chip').forEach(b=>b.classList.toggle('on',vals.includes(b.textContent)));}
+
+// ── STATE ──
+let personas=[],activePersonaIdx=0,activePersonaId=null;
+
+// ── AVATAR STATE ──
+let userAvatar=localStorage.getItem('uv_user_av')||'🌸';
+let aiAvatar=localStorage.getItem('uv_ai_av')||'🦄';
+function saveAvatars(){localStorage.setItem('uv_user_av',userAvatar);localStorage.setItem('uv_ai_av',aiAvatar);}
+
+const AV_EMOJIS_USER=['🌸','🌙','⚡','💜','🔥','💀','🦋','👑','🌹','❄️','🌊','🐺','🦊','😈','🧛','🌺','🗡️','💫','🎭','🌑','🐉','🌿','🍑','💎','🦄','🌈','🎀','🍓','🌻','✨','🦚','🐱'];
+const AV_EMOJIS_AI=['🦄','🤖','🌟','🔮','📖','✦','🧙','🌙','⚡','💫','🎭','🐉','🌺','👑','🦋','🌸','💜','🔥','❄️','🌊','🦊','😈','🌹','🗡️'];
+const AV_EMOJIS_RPG=['👤','👑','🧛','🐺','😈','🗡️','🔮','⚡','🦊','🌙','💀','🔥','🌹','🧙','⚔️','🐉','🎭','🌑','💜','🖤','🤺','🏹','🦹','🧟','👿','🦸','🧝','🧞','🦡','👻','💂','🤵'];
+let genre='Romance',genreEm='📖',genreClass='romance';
+let chatHistory=[],msgCount=0,autoSaveTimer=null,currentStoryId=null;
+
+function loadPersonas(){try{return JSON.parse(localStorage.getItem('uv_personas')||'[]');}catch{return[];}}
+function savePersonasStorage(){localStorage.setItem('uv_personas',JSON.stringify(personas));if(activePersonaId)localStorage.setItem('uv_active_persona',activePersonaId);}
+function newBlankPersona(){return{id:'p-'+Date.now()+Math.random().toString(36).slice(2),name:'',age:'',gender:'',orientation:'',appearance:'',style:'',personality:'',background:'',secrets:''};}
+function loadStories(){try{return JSON.parse(localStorage.getItem('uv_stories')||'[]');}catch{return[];}}
+function saveStories(arr){localStorage.setItem('uv_stories',JSON.stringify(arr));updateHistCount();}
+function updateHistCount(){document.getElementById('hist-count').textContent=loadStories().length;}
+
+function goHome(){document.getElementById('pg-home').classList.add('on');document.getElementById('pg-fanfic').classList.remove('on');}
+function goFanfic(g,em,cls){
+  genre=g;genreEm=em;genreClass=cls;
+  document.getElementById('ftb-em').textContent=em;document.getElementById('ftb-label').textContent=g;
+  document.getElementById('ftb-badge').className='ftb-badge badge-'+cls;
+  chatHistory=[];currentStoryId=null;msgCount=0;currentScenario='none';
+  buildScenarioBar();resetWelcome();
+  document.getElementById('pg-home').classList.remove('on');document.getElementById('pg-fanfic').classList.add('on');
+  document.getElementById('fanfic-inp').focus();
+}
+function resetWelcome(){
+  const p=getActivePersona();const sc=SCENARIOS.find(x=>x.id===currentScenario);
+  document.getElementById('fanfic-msgs').innerHTML=`<div class="msgs-welcome" id="msgs-welcome">
+    <div class="mw-em">✍️</div><div class="mw-title">Vamos escrever!</div>
+    <p class="mw-text">Escolha um cenário e descreva o que acontece. A IA narra! 🌟</p>
+    <div class="mw-tip">💡 As histórias são salvas automaticamente!</div>
+    ${p&&p.name?`<div class="mw-persona-chip">🎭 <strong>${escHtml(p.name)}</strong> é a protagonista</div>`:''}
+    ${sc&&sc.id!=='none'?`<div class="mw-scenario-chip">${sc.em} Cenário: ${sc.name}</div>`:''}
+  </div>`;
+}
+
+function getActivePersona(){if(!activePersonaId)return null;return personas.find(p=>p.id===activePersonaId)||null;}
+function buildPersonaBlock(p){
+  if(!p||!p.name)return '';
+  const lines=['PROTAGONISTA (persona da leitora):'];
+  if(p.name)lines.push('• Nome: '+p.name);if(p.age)lines.push('• Idade: '+p.age);
+  if(p.gender)lines.push('• Gênero: '+p.gender);if(p.orientation)lines.push('• Orientação: '+p.orientation);
+  if(p.appearance)lines.push('• Aparência: '+p.appearance);if(p.style)lines.push('• Estilo: '+p.style);
+  if(p.personality)lines.push('• Personalidade: '+p.personality);
+  if(p.background)lines.push('• Background: '+p.background);if(p.secrets)lines.push('• Segredos: '+p.secrets);
+  return lines.join('\n');
+}
+
+function renderAv(src){
+  if(!src)return'🌸';
+  if(src.startsWith('data:'))return`<img class="av-img" src="${src}"/>`;
+  return src;
+}
+function addMsg(text,role){
+  const w=document.getElementById('msgs-welcome');if(w)w.remove();
+  const msgs=document.getElementById('fanfic-msgs');
+  const d=document.createElement('div');d.className='msg '+(role==='user'?'u':'ai');d.id='m-'+(++msgCount);
+  const avSrc=role==='user'?userAvatar:aiAvatar;
+  const av=renderAv(avSrc);
+  const name=role==='user'?'Você':'UniVerse IA';
+  const who=role==='user'?'user':'ai';
+  d.innerHTML=`<div class="mav clickable" onclick="openAvPicker('${who}')" title="Trocar avatar">${av}</div><div class="mbody"><div class="mname">${name}</div><div class="bbl">${fmt(text)}</div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function addTyping(){
+  const msgs=document.getElementById('fanfic-msgs');const d=document.createElement('div');d.className='msg ai';d.id='typing-ind';
+  d.innerHTML=`<div class="mav">${renderAv(aiAvatar)}</div><div class="mbody"><div class="mname">UniVerse IA</div><div class="bbl"><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function remTyping(){const e=document.getElementById('typing-ind');if(e)e.remove();}
+function fmt(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');}
+
+// ══ GEMINI API KEY ══
+let GEMINI_KEY=localStorage.getItem('uv_gemini_key')||'';
+
+function openKeyModal(){
+  document.getElementById('key-modal-ov').classList.add('on');
+  document.getElementById('key-inp').value=GEMINI_KEY;
+  updateKeyStatus();
+}
+function closeKeyModal(){document.getElementById('key-modal-ov').classList.remove('on');}
+function updateKeyStatus(){
+  const st=document.getElementById('key-status');
+  if(GEMINI_KEY){
+    st.innerHTML='<span style="color:var(--b);font-weight:800">✦ Chave salva! Pronto para criar histórias 🦄</span>';
+  } else {
+    st.innerHTML='<span style="color:var(--dim)">Nenhuma chave configurada. Insira sua chave abaixo.</span>';
+  }
+}
+function saveGeminiKey(){
+  const k=document.getElementById('key-inp').value.trim();
+  if(!k){toast('✦ Digite a chave primeiro!');return;}
+  GEMINI_KEY=k;localStorage.setItem('uv_gemini_key',k);
+  updateKeyStatus();toast('🌸 Chave salva com sucesso!');
+  setTimeout(closeKeyModal,900);
+}
+function clearGeminiKey(){
+  GEMINI_KEY='';localStorage.removeItem('uv_gemini_key');
+  document.getElementById('key-inp').value='';
+  updateKeyStatus();toast('🗑️ Chave removida.');
+}
+
+async function callAI(messages,system){
+  if(!GEMINI_KEY){
+    openKeyModal();
+    throw new Error('no-key');
+  }
+  // Convert from Anthropic format → Gemini format
+  const contents=messages.map(m=>({
+    role:m.role==='assistant'?'model':'user',
+    parts:[{text:m.content}]
+  }));
+  const body={contents};
+  if(system)body.system_instruction={parts:[{text:system}]};
+  body.generationConfig={maxOutputTokens:1000};
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+    {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message||'Gemini error');
+  if(d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0])
+    return d.candidates[0].content.parts[0].text;
+  throw new Error('empty');
+}
+
+
+
+function triggerAutoSave(){
+  if(chatHistory.length<2)return;
+  const dot=document.getElementById('autosave-dot'),txt=document.getElementById('autosave-txt'),pill=document.getElementById('autosave-pill');
+  dot.classList.add('saving');txt.textContent='salvando...';pill.classList.add('show');
+  clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>{performAutoSave();dot.classList.remove('saving');txt.textContent='salvo ✓';setTimeout(()=>pill.classList.remove('show'),2000);},1500);
+}
+function performAutoSave(){
+  if(chatHistory.length<2)return;const stories=loadStories();
+  const fAI=chatHistory.find(m=>m.role==='assistant');const preview=fAI?fAI.content.replace(/\*\*?/g,'').substring(0,100)+'...':'';
+  const fU=chatHistory.find(m=>m.role==='user');const autoTitle=fU?fU.content.substring(0,40):'História sem título';
+  if(currentStoryId){const idx=stories.findIndex(s=>s.id===currentStoryId);if(idx!==-1){stories[idx].history=chatHistory;stories[idx].preview=preview;stories[idx].updatedAt=Date.now();saveStories(stories);return;}}
+  const id='story-'+Date.now();currentStoryId=id;
+  stories.unshift({id,title:autoTitle,genre,genreEm,genreClass,preview,history:chatHistory,createdAt:Date.now(),updatedAt:Date.now(),isAuto:true});saveStories(stories);
+}
+function openSaveModal(){if(chatHistory.length<2){toast('✦ Escreva algo primeiro!');return;}const fU=chatHistory.find(m=>m.role==='user');document.getElementById('sm-title-inp').value=fU?fU.content.substring(0,50):'';document.getElementById('save-modal-ov').classList.add('on');setTimeout(()=>document.getElementById('sm-title-inp').select(),400);}
+function closeSaveModal(){document.getElementById('save-modal-ov').classList.remove('on');}
+function saveStory(){
+  const title=document.getElementById('sm-title-inp').value.trim()||'História sem título';const stories=loadStories();
+  const fAI=chatHistory.find(m=>m.role==='assistant');const preview=fAI?fAI.content.replace(/\*\*?/g,'').substring(0,100)+'...':'';
+  if(currentStoryId){const idx=stories.findIndex(s=>s.id===currentStoryId);if(idx!==-1){stories[idx].title=title;stories[idx].history=chatHistory;stories[idx].preview=preview;stories[idx].updatedAt=Date.now();stories[idx].isAuto=false;saveStories(stories);closeSaveModal();toast('✦ História atualizada!');return;}}
+  const id='story-'+Date.now();currentStoryId=id;
+  stories.unshift({id,title,genre,genreEm,genreClass,preview,history:chatHistory,createdAt:Date.now(),updatedAt:Date.now(),isAuto:false});saveStories(stories);closeSaveModal();toast('🌸 História salva!');
+}
+function openDrawer(){renderDrawer();document.getElementById('drawer-ov').classList.add('on');}
+function closeDrawer(){document.getElementById('drawer-ov').classList.remove('on');}
+function renderDrawer(){
+  const stories=loadStories();const body=document.getElementById('drawer-body');
+  if(!stories.length){body.innerHTML=`<div class="hist-empty"><span class="hist-empty-em">📭</span><div class="hist-empty-txt">Nenhuma história salva ainda. 🌸</div></div>`;return;}
+  body.innerHTML=stories.map(s=>{const d=new Date(s.updatedAt);const ds=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    return`<div class="hi" onclick="loadStory('${s.id}')"><div class="hi-top"><span class="hi-badge badge-${s.genreClass}">${s.genreEm} ${s.genre}</span><span class="hi-date">${ds}</span></div><div class="hi-title">${s.isAuto?'🔄 ':' '}${escHtml(s.title)}</div><div class="hi-preview">${escHtml(s.preview)}</div><button class="hi-del" onclick="delStory('${s.id}',event)">🗑️</button></div>`;
+  }).join('');
+}
+function loadStory(id){
+  const s=loadStories().find(x=>x.id===id);if(!s)return;
+  genre=s.genre;genreEm=s.genreEm;genreClass=s.genreClass;chatHistory=[...s.history];currentStoryId=s.id;msgCount=0;
+  document.getElementById('ftb-em').textContent=s.genreEm;document.getElementById('ftb-label').textContent=s.genre;document.getElementById('ftb-badge').className='ftb-badge badge-'+s.genreClass;
+  const msgs=document.getElementById('fanfic-msgs');msgs.innerHTML='';s.history.forEach(m=>addMsg(m.content,m.role==='user'?'user':'ai'));
+  closeDrawer();document.getElementById('pg-home').classList.remove('on');document.getElementById('pg-fanfic').classList.add('on');toast('📖 História carregada!');
+}
+function delStory(id,e){e.stopPropagation();let s=loadStories();s=s.filter(x=>x.id!==id);saveStories(s);if(currentStoryId===id)currentStoryId=null;renderDrawer();toast('🗑️ Removida!');}
+
+// PERSONA
+function openPersonaModal(){personas=loadPersonas();if(!personas.length){personas=[newBlankPersona()];activePersonaIdx=0;}renderPersonaTabs();loadPersonaForm(activePersonaIdx);document.getElementById('persona-modal-ov').classList.add('on');}
+function closePersonaModal(){document.getElementById('persona-modal-ov').classList.remove('on');}
+function renderPersonaTabs(){
+  const tabs=document.getElementById('persona-tabs');tabs.innerHTML='';
+  personas.forEach((p,i)=>{
+    const btn=document.createElement('button');btn.className='ptab'+(i===activePersonaIdx?' on':'');
+    btn.innerHTML=`${p.id===activePersonaId?'✦ ':''}${escHtml(p.name||'Nova')}<span class="ptab-del" onclick="delPersonaTab(${i},event)">✕</span>`;
+    btn.onclick=(e)=>{if(e.target.classList.contains('ptab-del'))return;activePersonaIdx=i;renderPersonaTabs();loadPersonaForm(i);};
+    tabs.appendChild(btn);
+  });
+  const add=document.createElement('button');add.className='ptab ptab-add';add.textContent='＋ Nova';
+  add.onclick=()=>{personas.push(newBlankPersona());activePersonaIdx=personas.length-1;renderPersonaTabs();loadPersonaForm(activePersonaIdx);};
+  tabs.appendChild(add);
+}
+function delPersonaTab(i,e){
+  e.stopPropagation();if(personas.length===1){toast('✦ Precisa ter ao menos uma!');return;}
+  if(personas[i].id===activePersonaId)activePersonaId=null;
+  personas.splice(i,1);activePersonaIdx=Math.min(activePersonaIdx,personas.length-1);
+  renderPersonaTabs();loadPersonaForm(activePersonaIdx);toast('🗑️ Persona removida!');
+}
+function loadPersonaForm(i){
+  buildChips('gender-chips',GENDER_CHIPS,'pf-gender-txt');buildChips('orient-chips',ORIENT_CHIPS,'pf-orientation-txt');buildChips('style-chips',STYLE_CHIPS,'pf-style');buildChips('trait-chips',TRAIT_CHIPS,'pf-personality');
+  const p=personas[i];
+  ['pf-name','pf-age'].forEach((f,k)=>document.getElementById(f).value=p[['name','age'][k]]||'');
+  document.getElementById('pf-gender-txt').value=p.gender||'';document.getElementById('pf-orientation-txt').value=p.orientation||'';
+  document.getElementById('pf-appearance').value=p.appearance||'';document.getElementById('pf-style').value=p.style||'';
+  document.getElementById('pf-personality').value=p.personality||'';document.getElementById('pf-background').value=p.background||'';document.getElementById('pf-secrets').value=p.secrets||'';
+  syncChips('gender-chips','pf-gender-txt');syncChips('orient-chips','pf-orientation-txt');syncChips('style-chips','pf-style');syncChips('trait-chips','pf-personality');
+  // build avatar emoji grid
+  buildPersonaAvGrid(p.avatarEmoji||'🌸');
+  // load saved avatar preview
+  const prevEl=document.getElementById('pf-av-preview');
+  if(p.avatarPhoto){prevEl.innerHTML=`<img class="av-img" src="${p.avatarPhoto}"/>`;}
+  else{prevEl.innerHTML=p.avatarEmoji||'🌸';}
+  ['pf-name','pf-age','pf-gender-txt','pf-orientation-txt','pf-appearance','pf-style','pf-personality','pf-background','pf-secrets'].forEach(id=>{
+    document.getElementById(id).oninput=()=>{
+      if(id==='pf-gender-txt')syncChips('gender-chips','pf-gender-txt');
+      if(id==='pf-orientation-txt')syncChips('orient-chips','pf-orientation-txt');
+      if(id==='pf-style')syncChips('style-chips','pf-style');
+      if(id==='pf-personality')syncChips('trait-chips','pf-personality');
+      updatePreview();
+    };
+  });
+  updatePreview();updateUseRow();
+}
+
+function buildPersonaAvGrid(selected){
+  const grid=document.getElementById('pf-av-emojis');
+  if(!grid)return;
+  grid.innerHTML=AV_EMOJIS_USER.map(e=>`<button type="button" style="width:34px;height:34px;border-radius:10px;border:2px solid ${e===selected?'var(--b)':'var(--a3)'};background:${e===selected?'var(--b3)':'transparent'};font-size:1.15rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;" onclick="selectPersonaEmoji('${e}')">${e}</button>`).join('');
+}
+
+function selectPersonaEmoji(e){
+  // clear photo if emoji chosen
+  const p=personas[activePersonaIdx];
+  if(p){p.avatarPhoto=null;p.avatarEmoji=e;}
+  const prevEl=document.getElementById('pf-av-preview');
+  prevEl.innerHTML=e;
+  buildPersonaAvGrid(e);
+  // clear file input
+  document.getElementById('pf-av-file').value='';
+}
+
+function handlePersonaPhoto(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const src=e.target.result;
+    const p=personas[activePersonaIdx];
+    if(p){p.avatarPhoto=src;p.avatarEmoji=null;}
+    const prevEl=document.getElementById('pf-av-preview');
+    prevEl.innerHTML=`<img class="av-img" src="${src}"/>`;
+    toast('📷 Foto carregada!');
+  };
+  r.readAsDataURL(f);
+}
+
+function readForm(){return{name:document.getElementById('pf-name').value.trim(),age:document.getElementById('pf-age').value.trim(),gender:document.getElementById('pf-gender-txt').value.trim(),orientation:document.getElementById('pf-orientation-txt').value.trim(),appearance:document.getElementById('pf-appearance').value.trim(),style:document.getElementById('pf-style').value.trim(),personality:document.getElementById('pf-personality').value.trim(),background:document.getElementById('pf-background').value.trim(),secrets:document.getElementById('pf-secrets').value.trim()};}
+function updatePreview(){
+  const data=readForm();const prev=document.getElementById('persona-preview');
+  if(!data.name){prev.style.display='none';updateUseRow();return;}
+  prev.style.display='';
+  document.getElementById('pp-name-disp').textContent=data.name+(data.age?`, ${data.age}`:'');
+  const tags=[];if(data.gender)tags.push(data.gender.split(',')[0].trim());if(data.orientation)tags.push(data.orientation.split(',')[0].trim());if(data.style)tags.push(data.style.split(',')[0].trim());
+  document.getElementById('pp-tags').innerHTML=tags.map(t=>`<span class="pp-tag">${escHtml(t)}</span>`).join('');
+  const dp=[];if(data.appearance)dp.push(data.appearance.substring(0,80));if(data.personality)dp.push(data.personality.substring(0,60));
+  document.getElementById('pp-desc-disp').textContent=dp.join(' · ').substring(0,140);
+  const g=data.gender.toLowerCase();
+  document.getElementById('pp-av').textContent=g.includes('homem')||g.includes('boy')||g.includes('masc')?'👦':g.includes('não-bin')||g.includes('fluido')||g.includes('agên')?'🌟':'🌸';
+  updateUseRow();
+}
+function updateUseRow(){
+  const row=document.getElementById('persona-use-row');const p=personas[activePersonaIdx];const hasName=document.getElementById('pf-name').value.trim();
+  if(!hasName){row.style.display='none';return;}row.style.display='flex';
+  const isAct=p&&p.id===activePersonaId;
+  document.getElementById('pur-label').textContent=isAct?`✦ ${escHtml(p.name||'Persona')} está ativa`:'Usar na história?';
+  document.getElementById('pur-toggle').textContent=isAct?'Desativar':'Ativar ✦';
+}
+function toggleActivePersona(){
+  const p=personas[activePersonaIdx];if(!p)return;
+  if(p.id===activePersonaId){activePersonaId=null;toast('Persona desativada');}else{activePersonaId=p.id;toast(`🌸 ${escHtml(p.name||'Persona')} ativada!`);}
+  savePersonasStorage();updatePersonaUI();updateUseRow();renderPersonaTabs();
+}
+function savePersona(){
+  const data=readForm();if(!data.name){toast('✦ Coloque um nome!');return;}
+  const p=personas[activePersonaIdx];
+  // preserve avatar fields already set during form interaction
+  Object.assign(p,data);
+  // avatarEmoji and avatarPhoto are set directly on p during selectPersonaEmoji/handlePersonaPhoto
+  activePersonaId=p.id;
+  // sync userAvatar with persona avatar
+  if(p.avatarPhoto){userAvatar=p.avatarPhoto;}
+  else if(p.avatarEmoji){userAvatar=p.avatarEmoji;}
+  saveAvatars();
+  savePersonasStorage();updatePersonaUI();renderPersonaTabs();updateUseRow();closePersonaModal();toast(`🌸 ${data.name} salva e ativada!`);
+}
+function updatePersonaUI(){
+  const p=getActivePersona();const btn=document.getElementById('persona-hdr-btn');
+  const phcAv=document.getElementById('phc-av');
+  if(p&&p.name){
+    btn.classList.add('has-persona');
+    // show avatar in home card
+    if(p.avatarPhoto){phcAv.innerHTML=`<img class="av-img" src="${p.avatarPhoto}"/>`;}
+    else{phcAv.innerHTML=p.avatarEmoji||'🌸';}
+    document.getElementById('phc-name').textContent=p.name;
+    const tags=[];if(p.gender)tags.push(p.gender.split(',')[0].trim());if(p.orientation)tags.push(p.orientation.split(',')[0].trim());
+    document.getElementById('phc-sub').textContent=tags.join(' · ')||'Persona ativa ✦';
+    const card=document.getElementById('persona-home-card');card.style.borderStyle='solid';card.style.borderColor='var(--b)';
+  }else{
+    btn.classList.remove('has-persona');
+    phcAv.innerHTML='🎭';
+    document.getElementById('phc-name').textContent='Criar sua Persona';
+    document.getElementById('phc-sub').textContent='A IA usará sua persona na história';
+    const card=document.getElementById('persona-home-card');card.style.borderStyle='dashed';card.style.borderColor='var(--b2)';
+  }
+}
+function clearChat(){chatHistory=[];currentStoryId=null;msgCount=0;currentScenario='none';buildScenarioBar();resetWelcome();toast('✦ Pronto para uma nova história!');}
+function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2600);}
+
+// ══ VOICE ══
+let mediaRecorder=null,audioChunks=[],isRecording=false,ttsAudio=null;
+
+async function toggleVoice(){
+  if(isRecording){stopRecording();return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRecorder=new MediaRecorder(stream);audioChunks=[];
+    mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+    mediaRecorder.onstop=async()=>{
+      stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(audioChunks,{type:'audio/webm'});
+      await transcribeAudio(blob);
+    };
+    mediaRecorder.start();isRecording=true;
+    document.getElementById('voice-btn').classList.add('recording');
+    document.getElementById('voice-btn').textContent='⏹️';
+    document.getElementById('voice-wave').classList.add('on');
+    document.getElementById('inp-hint-txt').textContent='Gravando...';
+    toast('🎙️ Gravando... toque para parar');
+  }catch(e){toast('🎙️ Permita o microfone nas configurações!');}
+}
+function stopRecording(){
+  if(mediaRecorder&&isRecording){mediaRecorder.stop();isRecording=false;}
+  document.getElementById('voice-btn').classList.remove('recording');
+  document.getElementById('voice-btn').textContent='🎙️';
+  document.getElementById('voice-wave').classList.remove('on');
+  document.getElementById('inp-hint-txt').textContent='Shift+Enter = linha';
+  toast('⏳ Transcrevendo...');
+}
+async function transcribeAudio(blob){
+  if(!GEMINI_KEY){transcribeWebSpeech();return;}
+  try{
+    const b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(blob);});
+    const body={contents:[{role:'user',parts:[{inline_data:{mime_type:'audio/webm',data:b64}},{text:'Transcreva exatamente o que foi dito em português. Responda APENAS com a transcrição, sem pontuação extra.'}]}]};
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const d=await resp.json();
+    const text=d.candidates&&d.candidates[0]?d.candidates[0].content.parts[0].text.trim():'';
+    if(text){
+      const inp=document.getElementById('fanfic-inp');
+      inp.value=inp.value?inp.value+' '+text:text;
+      toast('✦ Voz transcrita!');
+    }else{toast('Não entendi. Tente novamente!');}
+  }catch{
+    transcribeWebSpeech();
+  }
+}
+function transcribeWebSpeech(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){toast('Transcrição não disponível neste navegador.');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const rec=new SR();rec.lang='pt-BR';rec.interimResults=false;rec.maxAlternatives=1;
+  rec.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    const inp=document.getElementById('fanfic-inp');
+    inp.value=inp.value?inp.value+' '+t:t;
+    toast('✦ Voz transcrita!');
+    hideSuggestions();
+  };
+  rec.onerror=()=>toast('Não consegui entender. Tente novamente!');
+  rec.start();
+}
+
+// TTS — fala a resposta da IA
+function speakText(text){
+  if(ttsAudio){ttsAudio.pause();ttsAudio=null;}
+  if(!('speechSynthesis' in window)){return;}
+  const clean=text.replace(/<[^>]*>/g,'').replace(/\*([^*]+)\*/g,'$1').substring(0,400);
+  const utt=new SpeechSynthesisUtterance(clean);
+  utt.lang='pt-BR';utt.rate=0.95;utt.pitch=1.1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+}
+
+// ══ SUGGESTIONS ══
+let sugTimer=null,sugShown=false;
+function onInputTyping(){
+  const val=document.getElementById('fanfic-inp').value;
+  if(val.length>0){hideSuggestions();clearTimeout(sugTimer);return;}
+  // empty field → show suggestions after 1s
+  clearTimeout(sugTimer);
+  sugTimer=setTimeout(()=>{if(!document.getElementById('fanfic-inp').value)fetchSuggestions();},800);
+}
+function hideSuggestions(){
+  document.getElementById('suggestions-wrap').classList.remove('show');
+  sugShown=false;
+}
+async function fetchSuggestions(){
+  if(sugShown||chatHistory.length===0)return;
+  const wrap=document.getElementById('suggestions-wrap');
+  wrap.classList.add('show');
+  document.getElementById('sug-loading').style.display='flex';
+  wrap.innerHTML='<span class="sug-loading" id="sug-loading">✦ gerando ideias...</span>';
+  const p=getActivePersona();const sc=SCENARIOS.find(x=>x.id===currentScenario);
+  const ctx=chatHistory.slice(-4).map(m=>(m.role==='user'?'Você: ':'IA: ')+m.content.substring(0,80)).join('\n');
+  try{
+    const r=await callAI([{role:'user',content:`Contexto da história:\n${ctx}\nGênero: ${genre}${sc&&sc.id!=='none'?'\nCenário: '+sc.name:''}${p&&p.name?'\nProtagonista: '+p.name:''}${rpgMode&&rpgChars.length?'\nPersonagens RPG ativos: '+rpgChars.map(c=>c.name).join(', '):''}
+
+Gere EXATAMENTE 3 sugestões curtas de continuação (máx 12 palavras cada) que eu poderia falar ou fazer a seguir. Responda SOMENTE em JSON assim: ["sugestão 1","sugestão 2","sugestão 3"]`}],
+      'Você gera sugestões de continuação para fanfics. Responda APENAS com o array JSON pedido, sem mais nada.');
+    const clean=r.replace(/```json|```/g,'').trim();
+    const arr=JSON.parse(clean);
+    wrap.innerHTML=arr.map(s=>`<button class="sug-btn" onclick="useSuggestion('${escHtml(s)}')">${escHtml(s)}</button>`).join('');
+    sugShown=true;
+  }catch{wrap.innerHTML='';}
+}
+function useSuggestion(text){
+  document.getElementById('fanfic-inp').value=text;
+  hideSuggestions();
+  document.getElementById('fanfic-inp').focus();
+}
+
+// ══ RPG MODE ══
+let rpgMode=false;
+let rpgChars=[];
+let editingRpgCharIdx=-1;
+const RC_EMOJIS=['👤','👑','🧛','🐺','😈','🗡️','🔮','⚡','🦊','🌙','💀','🔥','🌹','🧙','⚔️','🐉','🎭','🌑','💜','🖤'];
+const RC_VOICE=['Formal e elegante','Seco e direto','Irônico e sarcástico','Doce e carinhoso','Intenso e apaixonado','Misterioso e enigmático','Agressivo e dominador','Tímido e hesitante','Frio e calculista','Dramático e exagerado'];
+
+function toggleRPG(){
+  rpgMode=!rpgMode;
+  const btn=document.getElementById('rpg-toggle-btn');
+  const txt=document.getElementById('rpg-toggle-txt');
+  const bar=document.getElementById('rpg-chars-bar');
+  btn.classList.toggle('on',rpgMode);
+  txt.textContent=rpgMode?'Ativado':'Desativado';
+  bar.classList.toggle('show',rpgMode);
+  if(rpgMode){renderRpgCharsBar();toast('⚔️ Modo RPG ativado! Crie personagens ↑');}
+  else{toast('RPG desativado.');}
+}
+function renderRpgCharsBar(){
+  const bar=document.getElementById('rpg-chars-bar');
+  let html=rpgChars.map((c,i)=>`<div class="rpg-char-card" onclick="openRpgModal(${i})"><div class="rpg-char-av">${c.emoji}</div><div><div class="rpg-char-name">${escHtml(c.name)}</div><div class="rpg-char-role">${escHtml(c.role||'')}</div></div></div>`).join('');
+  html+=`<div class="rpg-char-card rpg-add-char" onclick="openRpgModal(-1)">＋ <span style="font-size:.7rem;font-weight:800">Personagem</span></div>`;
+  bar.innerHTML=html;
+}
+function openRpgModal(idx){
+  editingRpgCharIdx=idx;
+  // build emoji grid
+  const eg=document.getElementById('rc-emoji-grid');
+  eg.innerHTML=RC_EMOJIS.map(e=>`<button class="chip" onclick="selectRcEmoji('${e}')">${e}</button>`).join('');
+  // build voice chips
+  const vc=document.getElementById('rc-voice-chips');
+  vc.innerHTML=RC_VOICE.map(v=>`<button class="chip" onclick="selectRcVoice('${escHtml(v)}')">${v}</button>`).join('');
+  if(idx>=0&&rpgChars[idx]){
+    const c=rpgChars[idx];
+    document.getElementById('rc-name').value=c.name||'';
+    document.getElementById('rc-role').value=c.role||'';
+    document.getElementById('rc-personality').value=c.personality||'';
+    document.getElementById('rc-secret').value=c.secret||'';
+    // mark selected emoji
+    eg.querySelectorAll('.chip').forEach(b=>{if(b.textContent===c.emoji)b.classList.add('on');});
+    vc.querySelectorAll('.chip').forEach(b=>{if(b.textContent===c.voice)b.classList.add('on');});
+  }else{
+    document.getElementById('rc-name').value='';document.getElementById('rc-role').value='';
+    document.getElementById('rc-personality').value='';document.getElementById('rc-secret').value='';
+  }
+  document.getElementById('rpg-modal-ov').classList.add('on');
+}
+function closeRpgModal(){document.getElementById('rpg-modal-ov').classList.remove('on');}
+function selectRcEmoji(e){document.getElementById('rc-emoji-grid').querySelectorAll('.chip').forEach(b=>{b.classList.toggle('on',b.textContent===e);});}
+function selectRcVoice(v){document.getElementById('rc-voice-chips').querySelectorAll('.chip').forEach(b=>{b.classList.toggle('on',b.textContent===v);});}
+function getSelectedRcEmoji(){return document.getElementById('rc-emoji-grid').querySelector('.chip.on')?.textContent||'👤';}
+function getSelectedRcVoice(){return document.getElementById('rc-voice-chips').querySelector('.chip.on')?.textContent||'Misterioso e enigmático';}
+function saveRpgChar(){
+  const name=document.getElementById('rc-name').value.trim();
+  if(!name){toast('✦ Coloque um nome!');return;}
+  const c={name,emoji:getSelectedRcEmoji(),role:document.getElementById('rc-role').value.trim(),personality:document.getElementById('rc-personality').value.trim(),voice:getSelectedRcVoice(),secret:document.getElementById('rc-secret').value.trim()};
+  if(editingRpgCharIdx>=0)rpgChars[editingRpgCharIdx]=c;
+  else rpgChars.push(c);
+  renderRpgCharsBar();closeRpgModal();
+  toast(`${c.emoji} ${c.name} pronto para a história!`);
+}
+function buildRpgBlock(){
+  if(!rpgMode||!rpgChars.length)return '';
+  const lines=['PERSONAGENS DO ROLEPLAY (têm voz própria na história):'];
+  rpgChars.forEach(c=>{
+    lines.push(`\n• ${c.emoji} ${c.name}${c.role?' ('+c.role+')':''}`);
+    if(c.personality)lines.push(`  Personalidade: ${c.personality}`);
+    if(c.voice)lines.push(`  Voz/Fala: ${c.voice}`);
+    if(c.secret)lines.push(`  Objetivo/Segredo: ${c.secret}`);
+  });
+  lines.push('\nREGRAS RPG:\n- Estes personagens FALAM por conta própria com falas entre aspas\n- Cada um tem voz única e personalidade distinta\n- Eles interagem com a protagonista e entre si\n- A narrativa avança ATRAVÉS das falas e ações deles\n- Não invente novos personagens além dos listados');
+  return lines.join('\n');
+}
+
+// ══ SEND FANFIC (with voice + RPG + suggestions) ══
+async function sendFanfic(){
+  const inp=document.getElementById('fanfic-inp');const t=inp.value.trim();if(!t)return;
+  hideSuggestions();
+  inp.value='';addMsg(t,'user');chatHistory.push({role:'user',content:t});
+  document.getElementById('fanfic-snd').disabled=true;addTyping();
+  const gi={'Hot':'Conteúdo sensual e sugestivo permitido. Escreva com tensão, desejo e intensidade.','BL':'BL: romance entre homens, tensão emocional e química intensa.','GL':'GL: romance entre mulheres, sentimentos profundos e intimidade.','Dark':'Dark romance: obsessão, poder, elementos sombrios.','Suspense':'Suspense: tensão crescente, reviravoltas, mistério.','Drama':'Drama com conflitos emocionais e personagens complexos.','Fantasia':'Fantasia: mundos mágicos, criaturas, poderes.','Romance':'Romance doce e apaixonante.'};
+  const p=getActivePersona();const pb=buildPersonaBlock(p);const sc=getScenarioBlock();const rpgB=buildRpgBlock();
+  const sys=`Você é uma escritora criativa de fanfics do gênero ${genre}. ${gi[genre]||''}
+${sc?'\n'+sc+'\n':''}${pb?'\n'+pb+'\n\nREGRAS SOBRE A PERSONA:\n- '+p.name+' é sempre a protagonista presente em cena\n- NUNCA escreva falas diretas ou pensamentos dela — apenas narre em 3ª pessoa\n- Use os detalhes da persona de forma orgânica na narrativa\n':''}${rpgB?'\n'+rpgB+'\n':''}
+Estilo: literário, fluido, diálogos naturais com aspas "assim", descrições ricas e imersivas.
+Use *ações entre asteriscos* para gestos. Responda em português brasileiro.
+Continue de onde parou quando pedirem. Deixe o leitor querendo mais!`;
+  try{
+    const r=await callAI(chatHistory,sys);remTyping();
+    // show as RPG char msg if first char spoke
+    const firstChar=rpgMode&&rpgChars.length?rpgChars.find(c=>r.includes(c.name)):null;
+    if(firstChar){addRpgMsg(r,firstChar);}else{addMsg(r,'ai');}
+    chatHistory.push({role:'assistant',content:r});
+    triggerAutoSave();
+    // TTS speak
+    speakText(r.replace(/<[^>]*>/g,'').replace(/\*([^*]+)\*/g,'$1'));
+  }catch{remTyping();addMsg('✦ Erro de conexão. Tente novamente!','ai');}
+  document.getElementById('fanfic-snd').disabled=false;
+  document.getElementById('fanfic-inp').focus();
+  // show suggestions after 3s idle
+  clearTimeout(sugTimer);sugTimer=setTimeout(()=>{if(!document.getElementById('fanfic-inp').value)fetchSuggestions();},3000);
+};
+
+function addRpgMsg(text,char){
+  const w=document.getElementById('msgs-welcome');if(w)w.remove();
+  const msgs=document.getElementById('fanfic-msgs');
+  const d=document.createElement('div');d.className='msg rpg-char ai';d.id='m-'+(++msgCount);
+  d.innerHTML=`<div class="mav">${char.emoji}</div><div class="mbody"><div class="mname">${escHtml(char.name)}</div><div class="bbl">${fmt(text)}</div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ══ AVATAR PICKER ══
+let avPickerTarget='user'; // 'user' | 'ai' | 'rpg-N'
+let avPickerTab='emoji';
+let avPickerEmoji='🌸';
+let avPickerPhoto=null;
+let avPickerRpgIdx=-1;
+
+function openAvPicker(target){
+  avPickerTarget=target;
+  avPickerPhoto=null;
+  // Set current values
+  if(target==='user'){
+    avPickerEmoji=userAvatar.startsWith('data:')?'🌸':userAvatar;
+    document.getElementById('av-pick-title').textContent='🖼️ Meu Avatar';
+    buildAvEmojiGrid(AV_EMOJIS_USER, avPickerEmoji);
+    updatePhotoPreview(userAvatar);
+  } else if(target==='ai'){
+    avPickerEmoji=aiAvatar.startsWith('data:')?'🦄':aiAvatar;
+    document.getElementById('av-pick-title').textContent='🤖 Avatar da IA';
+    buildAvEmojiGrid(AV_EMOJIS_AI, avPickerEmoji);
+    updatePhotoPreview(aiAvatar);
+  } else if(target.startsWith('rpg-')){
+    avPickerRpgIdx=parseInt(target.split('-')[1]);
+    const ch=rpgChars[avPickerRpgIdx];
+    avPickerEmoji=ch?ch.avatar||ch.emoji||'👤':'👤';
+    document.getElementById('av-pick-title').textContent='⚔️ Avatar: '+(ch?ch.name:'Personagem');
+    buildAvEmojiGrid(AV_EMOJIS_RPG, avPickerEmoji);
+    updatePhotoPreview(ch&&ch.avatarPhoto?ch.avatarPhoto:null);
+  }
+  switchAvTab('emoji');
+  document.getElementById('av-pick-ov').classList.add('on');
+}
+
+function closeAvPicker(){document.getElementById('av-pick-ov').classList.remove('on');}
+
+function switchAvTab(tab){
+  avPickerTab=tab;
+  document.getElementById('av-tab-emoji').classList.toggle('on',tab==='emoji');
+  document.getElementById('av-tab-photo').classList.toggle('on',tab==='photo');
+  document.getElementById('av-emoji-panel').style.display=tab==='emoji'?'':'none';
+  document.getElementById('av-photo-panel').style.display=tab==='photo'?'':'none';
+}
+
+function buildAvEmojiGrid(list, selected){
+  const g=document.getElementById('av-emoji-grid');
+  g.innerHTML=list.map(e=>`<button class="av-emoji-btn${e===selected?' on':''}" onclick="selectAvEmoji('${e}')">${e}</button>`).join('');
+}
+
+function selectAvEmoji(e){
+  avPickerEmoji=e;avPickerPhoto=null;
+  document.querySelectorAll('.av-emoji-btn').forEach(b=>b.classList.toggle('on',b.textContent===e));
+  updatePhotoPreview(null);
+}
+
+function handleAvPhoto(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    avPickerPhoto=e.target.result;
+    avPickerTab='photo';
+    updatePhotoPreview(avPickerPhoto);
+    toast('📷 Foto carregada!');
+  };
+  r.readAsDataURL(f);
+}
+
+function updatePhotoPreview(src){
+  const prev=document.getElementById('av-photo-preview');
+  if(src&&src.startsWith('data:')){
+    prev.innerHTML=`<img class="av-img" src="${src}"/>`;
+  } else {
+    prev.innerHTML=avPickerEmoji||'📷';
+  }
+}
+
+function applyAvatar(){
+  const val=avPickerPhoto||(avPickerTab==='emoji'?avPickerEmoji:avPickerEmoji);
+  if(avPickerTarget==='user'){
+    userAvatar=val;saveAvatars();
+    updateAllMavs('u',val);
+    // update persona home card
+    const ph=document.getElementById('phc-av');
+    ph.innerHTML=val.startsWith('data:')?`<img class="av-img" src="${val}"/>`:(val||'🌸');
+    toast('🌸 Seu avatar atualizado!');
+  } else if(avPickerTarget==='ai'){
+    aiAvatar=val;saveAvatars();
+    updateAllMavs('ai',val);
+    toast('🦄 Avatar da IA atualizado!');
+  } else if(avPickerTarget.startsWith('rpg-')){
+    const idx=parseInt(avPickerTarget.split('-')[1]);
+    if(rpgChars[idx]){
+      if(val.startsWith('data:')){rpgChars[idx].avatarPhoto=val;rpgChars[idx].emoji=avPickerEmoji||rpgChars[idx].emoji;}
+      else{rpgChars[idx].emoji=val;rpgChars[idx].avatarPhoto=null;}
+      renderRpgCharsBar();
+      toast(`${val.startsWith('data:')?'📷':val} Avatar atualizado!`);
+    }
+  }
+  closeAvPicker();
+}
+
+function updateAllMavs(role, val){
+  const selector=role==='u'?'.msg.u .mav':'.msg.ai .mav:not(.rpg-char .mav)';
+  document.querySelectorAll(selector).forEach(el=>{
+    el.innerHTML=val.startsWith('data:')?`<img class="av-img" src="${val}"/>`:(val||'🌸');
+  });
+}
+
+// Make persona home card avatar clickable
+function initClickableHomeAv(){
+  const phc=document.getElementById('phc-av');
+  if(phc){phc.classList.add('clickable');phc.onclick=()=>openAvPicker('user');}
+}
+
+// Override renderRpgCharsBar to add clickable avatar & avatar support
+const _origRenderRpgCharsBar=renderRpgCharsBar;
+renderRpgCharsBar=function(){
+  const bar=document.getElementById('rpg-chars-bar');
+  let html=rpgChars.map((c,i)=>{
+    const avSrc=c.avatarPhoto||c.emoji||'👤';
+    const avHtml=avSrc.startsWith('data:')?`<img class="av-img" src="${avSrc}"/>`:(avSrc);
+    return`<div class="rpg-char-card" onclick="openRpgModal(${i})"><div class="rpg-char-av" onclick="event.stopPropagation();openAvPicker('rpg-${i}')" style="cursor:pointer" title="Trocar avatar">${avHtml}</div><div><div class="rpg-char-name">${escHtml(c.name)}</div><div class="rpg-char-role">${escHtml(c.role||'')}</div></div></div>`;
+  }).join('');
+  html+=`<div class="rpg-char-card rpg-add-char" onclick="openRpgModal(-1)">＋ <span style="font-size:.7rem;font-weight:800">Personagem</span></div>`;
+  bar.innerHTML=html;
+};
+
+// Override addRpgMsg to use avatarPhoto if set
+const _origAddRpgMsg=addRpgMsg;
+addRpgMsg=function(text,char){
+  const w=document.getElementById('msgs-welcome');if(w)w.remove();
+  const msgs=document.getElementById('fanfic-msgs');
+  const d=document.createElement('div');d.className='msg rpg-char ai';d.id='m-'+(++msgCount);
+  const avSrc=char.avatarPhoto||char.emoji||'👤';
+  const avHtml=avSrc.startsWith('data:')?`<img class="av-img" src="${avSrc}"/>`:(avSrc);
+  const charIdx=rpgChars.indexOf(char);
+  d.innerHTML=`<div class="mav clickable" onclick="openAvPicker('rpg-${charIdx}')" title="Trocar avatar">${avHtml}</div><div class="mbody"><div class="mname">${escHtml(char.name)}</div><div class="bbl">${fmt(text)}</div></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+};
+
+// INIT
+personas=loadPersonas();
+if(personas.length){const saved=localStorage.getItem('uv_active_persona');activePersonaId=saved&&personas.find(p=>p.id===saved)?saved:null;}
+applyTheme(currentTheme);updateHistCount();updatePersonaUI();buildScenarioBar();
+resetWelcome();
+initClickableHomeAv();
+// Show key prompt if not set
+if(!GEMINI_KEY){setTimeout(()=>{openKeyModal();toast('🔑 Configure sua chave do Gemini para começar!');},800);}
+// Update key btn indicator
+function updateKeyBtn(){const btn=document.getElementById('key-btn');if(btn){btn.textContent=GEMINI_KEY?'🔑✦':'🔑';}}
+updateKeyBtn();
+// Patch saveGeminiKey to also update btn
+const _origSaveKey=saveGeminiKey;
+saveGeminiKey=function(){_origSaveKey();updateKeyBtn();};
+const _origClearKey=clearGeminiKey;
+clearGeminiKey=function(){_origClearKey();updateKeyBtn();};
+</script>
+
+<!-- KEY MODAL -->
+<div class="modal-ov" id="key-modal-ov" onclick="if(event.target===this)closeKeyModal()">
+  <div class="modal" style="max-height:80vh">
+    <div class="modal-hdr">
+      <div class="modal-handle"></div>
+      <div class="modal-hdr-row"><div class="modal-title">🔑 Chave do Gemini</div><button class="modal-close" onclick="closeKeyModal()">✕</button></div>
+    </div>
+    <div style="padding:18px 17px 8px;">
+      <div style="border-radius:16px;padding:13px 15px;background:linear-gradient(135deg,rgba(194,100,240,.09),rgba(255,110,180,.06));border:2px solid var(--b2);margin-bottom:14px;">
+        <div style="font-size:.78rem;font-weight:800;color:var(--b);margin-bottom:5px;">✦ Como obter sua chave gratuita:</div>
+        <div style="font-size:.7rem;color:var(--dim);line-height:1.8;">
+          1. Acesse <strong style="color:var(--a)">aistudio.google.com</strong><br>
+          2. Faça login com sua conta Google<br>
+          3. Clique em <strong style="color:var(--a)">Get API key</strong><br>
+          4. Crie uma nova chave e cole aqui 🌸
+        </div>
+      </div>
+      <div id="key-status" style="font-size:.72rem;margin-bottom:12px;text-align:center;min-height:20px;"></div>
+      <div class="fg">
+        <label>SUA CHAVE DA API</label>
+        <div style="position:relative;">
+          <input type="password" id="key-inp" placeholder="AIza..." style="width:100%;padding-right:44px;"
+            oninput="document.getElementById('key-inp').type='password'"
+          />
+          <button onclick="const i=document.getElementById('key-inp');i.type=i.type==='password'?'text':'password'"
+            style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--dim)">👁️</button>
+        </div>
+      </div>
+      <div style="font-size:.64rem;color:var(--dim);text-align:center;margin-bottom:4px;line-height:1.6;">
+        A chave fica salva apenas no seu dispositivo.<br>Nunca é enviada para outros servidores.
+      </div>
+    </div>
+    <div class="modal-actions" style="padding-bottom:8px;">
+      <button class="btn-cancel" onclick="clearGeminiKey()">🗑️ Limpar</button>
+      <button class="btn-save" onclick="saveGeminiKey()">✦ Salvar Chave</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
